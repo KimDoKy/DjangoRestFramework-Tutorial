@@ -1,0 +1,10 @@
+*.db
+*.pyc
+*~
+.*
+env
+.idea/
+.conf/ 
+# Accept these files in the repository
+!.gitignore
+!.travis.yml
