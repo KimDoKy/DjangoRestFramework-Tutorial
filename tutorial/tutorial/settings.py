@@ -25,7 +25,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# Application definition
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 10
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
