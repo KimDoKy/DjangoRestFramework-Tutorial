@@ -1,6 +1,7 @@
 # Django REST Framework - Testing
 
-**Code without tests is broken as designed. - Jacob Kaplan-Moss**
+**Code without tests is broken as designed.  
+테스트가 없는 코드는 의도 한대로 작동하지 않는다. - Jacob Kaplan-Moss**
 
 REST 프레임워크는 Django의 기존 테스트 프레임워크를 확장하고, API Requests 작성에 대한 지원을 향상시키는 서포트 클래스를 포함하고 있습니다.
 
