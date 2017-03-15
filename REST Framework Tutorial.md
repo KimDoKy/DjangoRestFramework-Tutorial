@@ -499,17 +499,28 @@ def snippet_detail(request, pk):
 여기서 특정 콘텐츠 형태에 대한 요청이나 응답을 명시적으로 연결하지 않았음을 주목하세요. `request.data`는 `json`요청 뿐만 아니라 `yaml`과 같은 다른 포맷도 다룰 수 있습니다. 응답 객체에 데이터를 담아 리턴하는 것과 비슷하면서도, REST 프레임워크에서는 우리가 원하는 형태로 응답객체를 렌더링 해 줍니다.
 
 ### URL의 접미어를 통해 다른 포맷 제공하기
-snippets - views.py
 
-두가지 뷰에 `format` 키워드 추가
+하나의 콘텐츠 형태에 묶여 있지 않다는 응답 객체의 장점을 활용하기 위해, 우리 API에서도 여러 형태의 포맷을 제공해야 합니다. 포맷의 접미어를 URL 형태로 전달받으려면, 다음과 같은 URL을 다룰 수 있어야 합니다.
+
 ```
+http://example.com/api/item/1.json
+```
+우선 `format`키워드를 두 가지 뷰에 추가해 봅시다.
+
+```
+# snippets/views.py
+
 def snippet_list(request, format=None):  
+
+...
+
 def snippet_detail(request, pk, format=None):
 ```
-
-snippets - urls.py
+`urls.py`를 조금 수정하겠습니다. 기존 URL에 `format_suffix_patterns`라는 패턴을 추가합니다.
 
 ```
+# snippets/urls.py
+
 from django.conf.urls import patterns, url  
 from rest_framework.urlpatterns import format_suffix_patterns  
 from snippets import views
@@ -521,9 +532,13 @@ urlpatterns = [
 
 urlpatterns = format_suffix_patterns(urlpatterns)
 ```
+이 외에 더 수정한 부분은 없는데도, 코드는 간명해졌고, 사용자는 자신이 원하는 형태의 포맷을 전달 받을 수 있습니다.
 
 ### 어떻게 되었을까?
-인터프린터
+인터프린터에서 API를 테스트 해봅시다.  
+앞에서 했던 것과 비슷하게 작동하지만, 이번에는 잘못된 요청에도 잘 대응합니다.
+
+전체 코드 조각 목록을 받아봅시다.
 
 ```
 http http://127.0.0.1:8000/snippets/
@@ -549,14 +564,23 @@ HTTP/1.1 200 OK
   }
 ]
 ```
+
+이제는 `Accept`헤더를 사용하여 응답 받을 데이터의 포맷도 지정할 수 있습니다.
+
 ```
 http http://127.0.0.1:8000/snippets/ Accept:application/json  # Request JSON  
 http http://127.0.0.1:8000/snippets/ Accept:text/html         # Request HTML   
 ```
+
+포맷 접미어를 붙여서 지정 할 수도 있습니다.
+
 ```
 http http://127.0.0.1:8000/snippets.json  # JSON suffix  
 http http://127.0.0.1:8000/snippets.api   # Browsable API suffix  
 ```
+
+`Content-Type` 헤더를 사용해서 데이터의 포맷을 지정 할 수도 있습니다.
+
 ```
 # 데이터를 넘기면서 POST 요청
 http --form POST http://127.0.0.1:8000/snippets/ code="print 123"
@@ -582,15 +606,24 @@ http --json POST http://127.0.0.1:8000/snippets/ code="print 456"
     "style": "friendly"
 }
 ```
-`http://127.0.0.1:8000/snippets/` 브라우저에서도 확인
+`http://127.0.0.1:8000/snippets/` 브라우저에서도 확인 가능합니다.
 
 ### 탐색 가능한 API
+API는 클라이언트의 요청에 따라 데이터의 포맷을 결정하여 응답합니다. 따라서 웹 브라우저의 요청에 대해서는 기본적으로 HTML 형태로 응답해주게 됩니다. 이 덕분에 API를 웹 브라우저에서 탐색할 수 있습니다.
+
+브라우저에서 탐색 가능함은 사용성 면에서 굉장히 유용하여, API를 더 쉽게 개발하고 사용하도록 도와줍니다. 또한 다른 개발자들이 API를 파악하고 사용할 때의 진입장벽을 획기적으로 낮춰 줍니다.
 
 ## 튜토리얼 3: 클래스 기반 뷰
+앞서 함수 기반으로 만들었던 API 뷰를 클래스 기반 뷰로도 만들 수 있습니다. 이는 일반적인 기능을 재사용하게 해주며, 코드중복(DRY)도 막아주기 때문에 굉장히 쓸모 있는 패턴입니다.
+
 ### 클래스 기반 뷰로 API 재작성하기
-snippets - views.py
+먼저 최상단 뷰를 클래스 기반 뷰로 재작성해 봅시다.
+
+이를 위해 `views.py` 를 약간 리팩터링해야 합니다.
 
 ```
+# snippets/views.py
+
 from snippets.models import Snippet  
 from snippets.serializers import SnippetSerializer  
 from django.http import Http404  
@@ -615,6 +648,8 @@ class SnippetList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 ```
+이전 코드와 거의 똑같이 보이지만 HTTP 메서드를 분리했기 때문에 좀더 좋습니다. 마찬가지로 `views.py`에서 코드조각 하나를 담당하는 뷰도 수정합니다.
+
 ```
 class SnippetDetail(APIView):  
     """
@@ -644,9 +679,11 @@ class SnippetDetail(APIView):
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 ```
- snippets - urls.py
+아직까진 함수 기반 뷰와 크게 다르지 않습니다.
+`urls.py`도 수정해봅시다. 클래스 기반 뷰를 사용해야 하니까요.
  
 ```
+# snippets - urls.py
 from django.conf.urls import url  
 from rest_framework.urlpatterns import format_suffix_patterns  
 from snippets import views
@@ -658,12 +695,19 @@ urlpatterns = [
 
 urlpatterns = format_suffix_patterns(urlpatterns)  
 ```
+끝났습니다. 개발 서버를 실행해 보면 이전과 동일하게 작동하는 모습을 확인 할수 있습니다.
+
 ### 믹스인 사용하기
+클래스 기반 뷰를 사용하는 큰 이점은 기능들을 손쉽게 조합할 수 있다는 점입니다.
 
+지금까지 사용한 생성/조회/업데이트/삭제 등의 명령은 일반적으로 모델을 사용 할 때의 뷰와 비슷합니다.이러한 보편적인 기능을 REST 프레임워크에서는 믹스인 클래스로 구현해두었습니다.
 
-snippet - views.py
+이제 뷰에 믹스인 클래스를 추가해봅시다.
+`views.py`을 수정합니다.
 
 ```
+# snippet/views.py
+
 from snippets.models import Snippet  
 from snippets.serializers import SnippetSerializer  
 from rest_framework import mixins  
@@ -681,6 +725,9 @@ class SnippetList(mixins.ListModelMixin,
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 ```
+`GenericAPIView`와 `ListModelMixin`, `CreateModelMixin`을 사용하여 뷰를 만들었습니다.  
+기본 뷰(`GenericAPIView`)는 핵심 기능을 제공하며 믹스인 클래스들은 `.list()`나 `.create()` 기능을 제공합니다. 여기서는 이 기능들을 `get`과 `post` 메서드에 적절히 연결하였습니다.
+
 ```
 class SnippetDetail(mixins.RetrieveModelMixin,  
                     mixins.UpdateModelMixin,
@@ -698,10 +745,14 @@ class SnippetDetail(mixins.RetrieveModelMixin,
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 ```
+비슷하게, 여기서도 `GenericAPIView`는 핵심 기능을 제공하며, 나머지 믹스인들이 `.retrieve()`, `.update()`, `.destroy()` 기능을 제공합니다.
+
 ### 제네릭 클래스 기반 뷰 사용하기
-snippets - views.py
+믹스인 클래스를 사용하여 뷰의 코드를 꽤 많이 줄였지만, 더 줄일 수 있습니다. REST 프레임워크에서는 믹스인과 연결된 제네릭 뷰를 제공합니다. 이를 사용하면 `views.py`파일이 굉장히 짧아집니다.
 
 ```
+# snippets/views.py
+
 from snippets.models import Snippet  
 from snippets.serializers import SnippetSerializer  
 from rest_framework import generics
@@ -716,19 +767,39 @@ class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
 ```
+정말 간결해졌죠? 별 노력 없이 아주 많은 기능을 구현했는데도 코드는 더 깔끔하고 훨씬 Django다워졌습니다.
+
 ## 튜토리얼 4: 인증과 권한
+지금까지 우리가 만든 API에서는 누구라도 코드 조각을 편집, 삭제를 할 수 있습니다. 아무런 제한이 없습니다. 여기에 다음과 같은 고급 기능을 추가합니다.
+
+- 코드 조각은 만든 사람과 연관이 있다.
+- 인증받은 사용자만 코드 조각을 만들 수 있다.
+- 해당 코드 조각을 만든 사람만, 이를 편집, 삭제할 수 있다.
+- 인증받지 않은 사용자는 '읽기 전용'으로만 사용 가능하다.
+
 ### 모델에 속성 추가하기
-Snippet - models.py - Snippet
+`Snippet` 모델을 조금 수정합니다.
+
+필를 두개 추가합니다. 하나(owner)는 코드 조각을 만든 사람을 가리킵니다. 다른 하나는 하이라이트 된 코드를 HTML 형태로 저장하는데 사용됩니다.
 
 ```
+# snippet/models.py - Snippet
+
 owner = models.ForeignKey('auth.User', related_name='snippets')  
 highlighted = models.TextField()  
 ```
+그리고 모델이 저장될 때 하이라이트된 코드를 highlight 필드에 저장해야 합니다. 코드 하이라이팅에는 `pygments` 라이브러리를 사용합니다.
+
+필요한 라이브러리들을 임포트합니다.
+
 ```
 from pygments.lexers import get_lexer_by_name  
 from pygments.formatters.html import HtmlFormatter  
 from pygments import highlight
 ```
+
+모델에 `.save()`메서드를 작성합니다.
+
 ```
 def save(self, *args, **kwargs):  
     """
@@ -752,13 +823,21 @@ rm -r snippets/migrations
 python manage.py makemigrations snippets  
 python manage.py migrate 
 ```
+
+API를 테스트하기 위해 사용자 계정을 만듭니다.
+
 ```
 python manage.py createsuperuser  
 ```
+
 ### 사용자 모델에 엔드포인트 추가하기
-snippets - serializers.py 소스 추가
+사용자를 추가하였으니 사용자를 보여주는 API도 추가합니다.  
+
+`serializers.py` 파일에 새 시리얼라이저를 작성합니다.
 
 ```
+# snippets/serializers.py(추가)
+
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):  
@@ -768,9 +847,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'snippets')
 ```
-snippet - views.py
+`snippets`는 사용자 모델과 **반대 방향**으로 이어져 있기 때문에 `ModelSerializer`에 기본적으로 추가되지 않습니다. 따라서 명시적으로 필드를 지정해주었습니다.
+
+사용자와 관련된 뷰도 추가해봅시다. 읽기 전용 뷰만 있으면 되니까, 제네릭 클래스 기반 뷰 중에서 `ListAPIView`와 `RetrieveAPIView`를 사용합시다.
 
 ```
+# snippet/views.py
+
 from django.contrib.auth.models import User
 from snippets.serializers import UserSerializer
 
@@ -783,50 +866,74 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 ```
-
-snippets - urls.py
+마지막으로 뷰에 URL을 연결합니다.
 
 ```
+# snippets - urls.py
+
 url(r'^users/$', views.UserList.as_view()),  
 url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()), 
 ```
 
 ### 사용자가 만든 코드 조각 연결하기
-snippets - views.py / SnippetList 클래스에 추가
+지금까지 코드 조각을 만들었지만, 해당 코드 조각을 만든 사용자와 아무 관계도 맺지 않았습니다. 사용자는 직렬화된 표현에 나타나지 않았고, 요청하는 측에서 지정하는 속성이었습 뿐입니다.
+
+이를 해결하기 위해 코드 조각 뷰에서 `.perform_create()`메서드를 오버라이딩합니다. 이 메서드는 인스턴스를 저정하는 과정을 조정하며, 따라서 요청이나 요청 URL에서 정보를 가져와 원하는 대로 다룰 수 있습니다.
+
+`SnippetList` 뷰 클래스에 내용을 추가합니다.
 
 ```
+# snippets/views.py / SnippetList 클래스에 추가
+
 def perform_create(self, serializer):  
     serializer.save(owner=self.request.user)
 ```
+우리가 만든 시리얼라이저의 `create()`메서드는 검증한 요청 데이터에 더하여 `owner`필드도 전달합니다.
 
 ### 시리얼라이저 업데이트하기
-serializers.py의 SnippetSerializer에 추가
+이제 코드 조각이, 해당 코드 조각을 작성한 사용자와 연결되었습니다. `SnippetSerializer`에도 반영합시다.
 
 ```
+# serializers.py - SnippetSerializer에 추가
+
 owner = serializers.ReadOnlyField(source='owner.username') 
 ```
 > Meta클래스의 필드 목록에도 `owner`를 추가해야 합니다.
 
-### 뷰에 요청 권한 추가하기
+이 필드에는 조금 재미있는 점이 있습니다. `source`인자로는 특정 필드를 지정할 수 있습니다. 여기에는 직렬화된 인스턴스의 속성 뿐만 아니라 위의 코드에서처럼 마침표 표기 방식을 통해 속성을 탐색할 수도 있습니다. 마치 Django의 템플릿 언어와 비슷합니다.
 
-views.py
+이 필드는 `CharField`나 `BooleanField`와는 달리 타입이 없는 `ReadOnlyField`클래스로 지정했습니다. 타입이 없는 `ReadOnlyField`는 직렬화에 사용되었을 땐 언제나 읽기 전용이므로, 모델의 인스턴스를 업데이트 할 때는 사용할 수 없습니다. `CharField(read_only=True)`도 이와 같은 기능을 수행합니다.
+
+### 뷰에 요청 권한 추가하기
+이렇게해서 코드 조각이 사용자와 연결되었습니다. 이제 인증받은 사용자만 코드 조각을 생성/업데이트/삭제 해봅시다.
+
+REST 프레임워크는 특정 뷰에 제한을 걸 수 있는 권한 클래스를 제공하고 있습니다. 그중 한가지인 `IsAuthenticatedOrReadOnly`는 인증 받은 요청에 읽기와 쓰기 권한을 부여하고, 인증받지 않은 요청에 대해서는 읽기 권한만 부여합니다.
+
+뷰 파일에 다음 내용을 추가합니다.
 
 ```
+# views.py
+
 from rest_framework import permissions
 ```
-SnippetList 클래스와 SnippetDetail 클래스에 모두 다음 속성을 추가합니다.
+
+`SnippetList` 클래스와 `SnippetDetail` 클래스에 모두 다음 속성을 추가합니다.
 
 ```
 permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 ```
 
 ### 탐색 가능한 API에 로그인 추가하기
+지금 시점에 브라우저에서 API에 접속해보면 더이상 새 코드 조각을 만들 수 없을겁니다. 이를 해결하려면 사용자 로그인 기능이 필요합니다.
 
-snippets - urls.py
+URL 설정 파일인 `urls.py`를 수정하면 탐색 가능한 API에 사용할 로그인 뷰를 추가할 수 있습니다.
 
 ```
+# snippets/urls.py
 from django.conf.urls import include 
 ```
+
+파일의 끝부분에 다음 내용을 추가합니다. 탐색 가능한 API의 로그인 뷰와 로그아욱 뷰에 사용되는 url패턴입니다.
 
 ```
 urlpatterns += [  
@@ -834,11 +941,20 @@ urlpatterns += [
                                namespace='rest_framework')),
 ]
 ```
+url 패턴에서 `r'^api-auth/'`부분은 우리가 사용하고 싶은 URL을 나타냅니다. 여기에는 한가지 제약만 따르는데, namespace에 `'rest_framework'`를 지정해야 한다는 점입니다.
+
+다시 브라우저로 API에 접근해보면 오른쪽 상단에 `Login' 링크가 보일 겁니다. 이제 앞에서 만들었던 사용자로 로그인하면 코드조각을 만들 수 있습니다.
+
+코드 조각을 몇개 만들고 '/users/'에 가보세요. 해당 사용자가 만든 코드 조각 목록이 'snippets' 필드에 포함된 것을 확인 할 수 있습니다.
 
 ### 객체 수준에서 권한 설정하기
-snippets - permissions.py 생성
+코드 조각은 아무나 볼 수 있어야 하지만, 업데이트,삭제는 해당 코드를 만든 사용자만 할 수 있어야 합니다.
+
+이를 위해 커스텀 권한을 만듭니다.
 
 ```
+# snippets/permissions.py 생성
+
 from rest_framework import permissions
 
 
@@ -856,26 +972,43 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         # 쓰기 권한은 코드 조각의 소유자에게만 부여함
         return obj.owner == request.user
 ```
-views.py
-SnippetDetail 클래스에 permission_classes 속성을 추가합니다.
+커스텀 권한을 코드 조각 인스턴스에 추가합니다.
 
 ```
+# views.py -SnippetDetail 클래스에 permission_classes 속성을 추가합니다.
+
 permission_classes = (permissions.IsAuthenticatedOrReadOnly,  
                       IsOwnerOrReadOnly,)
 ```
+
+`IsOwnerOrReadOnly` 클래스도 임포트합니다.
+
 ```
 from snippets.permissions import IsOwnerOrReadOnly 
 ```
-### API에 인증 붙이기
+다시 브라우저로 돌아가면, 코드 조각에 대한 'DELETE'와 'PUT' 기능은 사용자에게만 나타날겁니다.
 
-인터프린터 오류메세지
+### API에 인증 붙이기
+API에 권한 설정을 했으므로, 이제는 코드 조각을 수정할 수 있는 인증 절차가 필요합니다.  
+지금까지는 [인증 클래스](http://www.django-rest-framework.org/api-guide/authentication/)를 만들지 않고 기본으로 제공되는 `SessionAuthentication`과 `BasicAuthentication`을 사용했습니다.  
+
+웹 브라우저로 API를 사용하는 경우, 로그이니 하면 브라우저의 세션에 인증 정보가 저장됩니다.
+
+프로그램 상에서 API를 사용하는 경우, 인증에 필요한 내용을 명시적으로 전달해야만 합니다.
+
+인증 없이 코드 조각을 생성하려는 경우, 다음과 같은 에러를 보여줍니다.
+
 ```
+# 인터프린터 오류메세지
+
 http POST http://127.0.0.1:8000/snippets/ code="print 123"
 
 {
     "detail": "Authentication credentials were not provided."
 }
 ```
+
+사용자 계정과 비밀번호를 포함하여 요청하면, 요청은 성공합니다.
 
 ```
 http -a tom:password POST http://127.0.0.1:8000/snippets/ code="print 789"
@@ -890,12 +1023,17 @@ http -a tom:password POST http://127.0.0.1:8000/snippets/ code="print 789"
     "style": "friendly"
 }
 ```
+이렇게 웹 API 위에 권한들이 잘 설정되었고, 사용자의 코드 조각에 대한 엔드 포인트도 완성되었습니다.
+
 ## 튜토리얼 5: 관계 & 하이퍼링크 API
+우리가 만든 API에서 '관계'는 주 키(Primary key)로 나타나고 있습니다. 이번에는 API의 발견성(discoverability)와 응집력(cohesion)을 향상시키고자 관계를 하이퍼링크로 나타내보겠습니다.
 
 ### API의 최상단에 대한 엔드 포인트 만들기
-snippets - views.py
+지금까지 '코드조각'과 '사용자'에 대한 엔드 포인트를 만들었지만, API의 시작점은 없었습니다. 이를 만들기 위해 평범한 함수 기반 뷰와 `@api_view` 데코레이터를 사용하겠습니다.
 
 ```
+# snippets - views.py
+
 from rest_framework.decorators import api_view  
 from rest_framework.response import Response  
 from rest_framework.reverse import reverse
@@ -908,11 +1046,20 @@ def api_root(request, format=None):
         'snippets': reverse('snippet-list', request=request, format=format)
     })
 ```
+여기서 URL을 만드는데 `reverse`함수를 사용한 점을 주목하세요.
 
 ### 코드 조각의 하이라이트 버전에 대한 엔드 포인트 만들기
-snippets/views.py
+API에서 아직까지 만들지 않은 부분은 바로, 코드 조각의 하이라이트 버전을 볼 수 있는 방법입니다.
+
+API의 다른 부분과는 달리 이번엔 JSON 대신 HTML형태로 나타내겠습니다. REST 프레임워크에서 HTML로 렌더링하는 방식은 두 가지 정도가 있는데, 하나는 쳄플릿을 사용하는 것이고, 다른 하나는 미리 렌더링된 HTML을 사용하는 것입니다.
+
+하이라이트된 코드 조각을 보여주려고 할 때 주의해야 할 점은, 우리가 사용 할 만한 제네릭 뷰가 없다는 것입니다. 오브젝트 자체가 아니라, 오브젝트의 속성 하나를 반환할 것이기 때문입니다.
+
+제네릭 뷰 대신 평범한 클래스를 사용하고, `.get()`메서드를 구현하겠습니다.
 
 ```
+# snippets/views.py
+
 from rest_framework import renderers  
 from rest_framework.response import Response
 
@@ -924,21 +1071,45 @@ class SnippetHighlight(generics.GenericAPIView):
         snippet = self.get_object()
         return Response(snippet.highlighted)
 ```
-
-snippets/urls.py
+새 뷰는 URL설정에서고 연결해야 합니다.
+최상단 url을 방금 만든 뷰로 연결합니다.
 
 ```
+# snippets/urls.py
+
 url(r'^$', views.api_root),  
 ```
+하이라이트된 코드 조각을 술 수 있는 url에 대한 패턴도 추가합니다.
 
 ```
 url(r'^snippets/(?P<pk>[0-9]+)/highlight/$', views.SnippetHighlight.as_view()),  
 ```
 
 ### 하이퍼링크로 API 연결하기
-snippets/serializers.py
+요소들 사이의 관게를 다루는 일은 웹 API 설계에서 또 하나의 도전 과제입니다. 관계를 표현하는 방법은 다양합니다.
+
+- 주 키(Primary key)
+- 하이퍼링크
+- 관계 요소의 식별 가능한 슬러그(slug) 필드
+- 관계 요소의 기본 문자열 표현
+- 포함된 관계 요소에 대한 표현
+- 이 외에도 사용자화된 표현
+
+REST 프레임워크에서는 모든 방법을 지원합니다. 관계 혹은 역관계에 적용하거나, 제네릭 외부 키(foreign key)처럼 사용자화된 manager에 적용할 수도 있습니다.
+
+여기서는 하이퍼링크 방식을 채택하겠습니다. 이렇게 하려면 기존에 사용했던 `ModelSerializer`를 `HyperlinkedModelSerializer`으로 변경해야 합니다.
+
+`HyperlinkedModelSerializer`는 다음과 같은 점들이 다릅니다.
+
+- `pk` 필드는 기본 요소가 아닙니다.
+- `HyperlinkedIdentityField`를 사용하는 `url`필드가 포함되어 있습니다.
+- 관계는 `PrimaryKeyRelatedField` 대신 `HyperlinkedRelatedField`를 사용하여 나타냅니다.
+
+기존 시리얼라이저에 하이퍼링크를 추가하시는 쉽습니다.
 
 ```
+# snippets/serializers.py
+
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):  
     owner = serializers.ReadOnlyField(source='owner.username')
     highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
@@ -956,12 +1127,23 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('url', 'username', 'snippets')
 ```
+이 코드에서는 새롭게 `highlight`필드가 추가되었습니다. 이 필드는 `url`필드와 같은 타입이며, `snippet-detail`url 패턴 대신 `snippet-highlight` url패턴을 가리킵니다.
+
+앞에서 URL의 format접미어로 `.json`을 붙였듯이, `highlight`필드에는 format 접미어로 `'.html'` 을 붙였습니다.
 
 ### URL 패턴에 이름 붙이기
+하이퍼링크 API를 만들고 싶다면, URL 패턴에 이름을 붙여야 합니다. 어떤 패턴들인지 살펴봅시다.
 
-snippets/urls.py
+- API의 최상단은 `user-list`와 `snippet-list`를 가리킵니다.
+- 코드조각 시리얼라이저에는 `snippet-highlight`를 가리키는 필드가 존재합니다.
+- 사용자 시리얼라이저에는 `snippet-detail`을 가리키는 필드가 존재합니다.
+- 코드조각 시리얼라이저와 사용자 시리얼라이저에는 `url`필드가 존재합니다. 이 필드는 기본적으로 `'{모델_이름}-detail'`을 가리키며 따라서 `snippet-detail`과 `user-detail`을 가리킵니다.
+
+이 이름들을 URL 설정에 넣었다면 `snippets/urls.py`은 다음과 같은 것입니다.
 
 ```
+# snippets/urls.py
+
 from django.conf.urls import url, include
 
 # API endpoints
@@ -992,21 +1174,40 @@ urlpatterns += [
 ```
 
 ### 페이징 기능 추가하기
-tutorial/settings.py
+사용자나 코드조각의 목록이 꽤 긴 경우들이 있습니다. 결과물을 여러 페이지로 나누어, API 클라이언트 측에서 각 페이지를 하나씩 차례대로 읽어가도록 만들겠습니다.
+
+페이지징 설정의 기본 값을 바꿔 봅니다.
 
 ```
+# tutorial/settings.py
+
 REST_FRAMEWORK = {  
     'PAGE_SIZE': 10
 }
 ```
+REST 프레임워크의 모든 설정은 'REST_FRAMEWORK'라는 딕셔너리에 넣어야합니다. 
+
+필요에 따라 페이징 스타일을 바꿀 수도 있지만 여기서는 기본 스타일을 따르겠습니다.
+
 ### 탐색 가능한 API
+탐색 가능한 API를 브라우저에서 열어서 링크들을 이리 저리 눌러보면, API의 구석구석을 둘러볼 수 있습니다. 또한 코드조각의 인스턴스의 '하이라이트 버전'을 살펴볼 수고 있습니다.(HTML형태입니다.)
 
 ## 튜토리얼 6: 뷰셋 & 라우터
+REST 프레임워크는 `ViewSets`이라는 추상 클래스를 제공합니다. 이를 통해 개발자는 API의 상호작용이나 상태별 모델링에 집중할 수 있고, URL 구조는 기본 관례에 따라 자동으로 설정됩니다.
+
+`ViewSet`클래스는 `View`클래스와 거의 비슷하지만, `get`과 `put`메서드는 지원하지 않고 `read`와 `update`메서드를 지원합니다.
+
+`ViewSet`클래스는 따지고 보면, 앞에서 만든 핸들러 메서드가 실제 뷰로 구체화될 때 이를 연결해주기만 합니다. 이때 보통은 `Router`클래스를 사용하여 복잡한 URL설정을 처리합니다.
+
 ### 뷰셋을 사용하여 리팩터링하기
-snippets - views.py
-UserList와 UserDetail 삭제
+지금까지 만든 뷰들을 살펴보면서 뷰셋을 사용해서 리팩터링 해봅시다.
+
+가장 먼저 리팩터링할 뷰는 `UserList`와 `UserDetail` 뷰입니다. `UserViewSet` 하나로 모읍니다. 두 뷰의 코드를 삭제한 다음 아래의 클래스 하나를 입력합니다.
 
 ```
+# snippets - views.py
+# UserList와 UserDetail 삭제
+
 from rest_framework import viewsets
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):  
@@ -1016,10 +1217,13 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 ```
+여기서 사용한 `ReadOnlyModelViewSet`클래스는 '읽기 전용' 기능을 자동으로 지원합니다. `queryset`과 `serializer_class` 속성은 여전히 설정을 해야하지만, 두 개의 클래스에 중복으로 설정할 필요는 없어졌습니다.
 
-SnippetList와 SnippetDetail, SnippetHighlight 삭제
+다음으로 `SnippetList`와 `SnippetDetail`, `SnippetHighlight`뷰를 리팩토링합니다.
 
 ```
+# SnippetList와 SnippetDetail, SnippetHighlight 삭제
+
 from rest_framework.decorators import detail_route
 
 class SnippetViewSet(viewsets.ModelViewSet):  
@@ -1041,11 +1245,22 @@ class SnippetViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
             serializer.save(owner=self.request.user)
 ```
+이번에는 읽기 기능과 쓰기 기능을 모두 지원하는 `ModelViewSet`클래스를 사용했습니다.  
+
+추가한 `highlight`기능에는 여전히 `@detail_router` 데코레이터를 사용했습니다. 이 데코레이터는 `create`나 `update`, `delete`에 해당하지 않는 기능에 대해 사용하면 됩니다.
+
+`@detail_router` 데코레이터를 사용한 기능은 기본적으로 `GET`요청에 응답합니다. `methods` 인자를 설정하면 `POST`요청에도 응답할 수 있습니다.
+
+추가 기능의 URL은 기본적으로 메서드 이름과 같습니다. 이를 변경하고 싶다면 데코레이터에 `url_path`인자를 설정하면 됩니다.
 
 ### 뷰셋과 주소를 명시적으로 연결하기
-snippets - urls.py
+핸들러 메서드는 단지 URL 설정과 연결하는 기능만 담당합니다. 여기서는 먼저 뷰셋의 뷰들을 명시적으로 살펴봅니다.
+
+`urls.py`파일에서 `ViewSet`클래스를 실제 뷰(concrete view)와 연결합니다.
 
 ```
+# snippets - urls.py
+
 from snippets.views import SnippetViewSet, UserViewSet, api_root  
 from rest_framework import renderers
 
@@ -1069,6 +1284,9 @@ user_detail = UserViewSet.as_view({
     'get': 'retrieve'
 })
 ```
+`ViewSet`클래스의 뷰들을HTTP 메서드에 따라 어떻게 실제 뷰와 연결했는지 살펴보세요.
+
+이제 실제 뷰와 URL을 연결합니다.
 
 ```
 urlpatterns = format_suffix_patterns([  
@@ -1082,10 +1300,13 @@ urlpatterns = format_suffix_patterns([
 ```
 
 ### 라우터 사용하기
+`View`클래스 대신 `ViewSet`클래스를 사용했기 때문에, 이제는 URL도 설정 할 필요가 없습니다. `Router`클래스를 사용하면 뷰 코드와 뷰, URL이 관례적으로 자동 연결됩니다. 단지 뷰를 라우터에 적절히 등록해주기만 하면 됩니다. 그러면 REST 프레임워크가 알아서 다 합니다.
 
-snippets - urls.py
+`urls.py` 파일을 다음과 같이 수정합니다.
 
 ```
+# snippets/urls.py
+
 from django.conf.urls import url, include  
 from snippets import views  
 from rest_framework.routers import DefaultRouter
@@ -1102,14 +1323,18 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 ```
+라우터에 뷰셋을 등록하는 일은 url 패턴 설정하기와 비슷합니다. 여기서는 두 개를 등록했습니다. 뷰들에 사용할 URL의 접두어와 뷰셋입니다.
+
+`DefaultRouter` 클래스는 API의 최상단 뷰를 자동으로 생성해주므로, `views`모듈에 있는 `api-root` 메서드와 연결했던 URL도 삭제했습니다.
+
 ### 뷰? 뷰셋? 장단점 비교하기
+뷰셋은 유용한 추상화입니다. API 전반에 걸쳐 일관적인 URL 관례를 구현할 수 있고 작성할 코드 양은 최소한으로 유지할 수 있어서, URL 설정에 낭비될 정성을 API의 상호작용과 표현 자체에 쏟을 수 있습니다.
 
+하지만 이것이 항상 옳다는 뜻은 아닙니다. 클래스 기반 뷰와 함수 뷰에 각각 장단점이 있듯이 말입니다. 뷰셋을 사용하면 명확함이 좀 약해집니다.
 
+정말 적은 양의 코드만으로 pastebin과 같은 웹 API를 구현했습니다 이 API는 웹 브라우저를 완벽히 지원하고, 인증 기능도 있고, 오브젝트로 권한도 설정되며 다양한 형태로 렌더링됩니다.
 
+지금까지 기본 Django 뷰에서 시작하여 기능들을 점진적으로 만드는 설졔 과정을 차근차근 살펴보았습니다.
 
-
-
-
-
-
+REST 프레임워크를 개인 공부하기 위해 [raccoony's cave](http://raccoonyy.github.io/)의 튜토리얼을 재정리한 것입니다. 
 
