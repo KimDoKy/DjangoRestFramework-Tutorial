@@ -88,6 +88,7 @@ user = User.objects.get(username='olivia')
 request = factory.get('/accounts/django-superstars/')
 force_authenticate(request, user=user, token=user.token)
 ```
+
 -
 
 **Note** : `APIRequestFactory`를 사용할 때 반환되는 객체는 Django의 표준 `HttpRequest`이며, REST 프레임워크의 Request 객체는 아니며 뷰가 호출 된 후에만 ​​생성됩니다.  
@@ -100,7 +101,9 @@ request = factory.get('/accounts/django-superstars/')
 request.user = user
 response = view(request)
 ```
+
 -
+
 #### Forcing CSRF validation
 기본적으로 `APIRequestFactory`으로 생성 된 request에는 REST 프레임워크 뷰에 전달 될 때 CSRF 유효성 검사가 적용되지 않습니다.
 CSRF 유효성 검사를 명시적으로 수행해야하는 경우, 팩토리를 인스턴스화 할 때 `enforce_csrf_checks` 플래그를 설정하면됩니다.
@@ -108,11 +111,13 @@ CSRF 유효성 검사를 명시적으로 수행해야하는 경우, 팩토리를
 ```
 factory = APIRequestFactory(enforce_csrf_checks=True)
 ```
+
 -
 
 **Note** : Django의 표준 `RequestFactory`는 이 옵션을 포함할 필요가 없다는 사실에 주목해야 합니다. Django를 사용할 때 뷰를 직접 테스트 할 때 실행되지 않는 미들웨어에서 CSRF 유효성 검사가 수행되기 때문입니다. REST 프레임워크를 사용할 때 뷰 내부에서 CSRF 유효성 검사가 수행되므로 요청 팩토리는 뷰 수준의 CSRF 검사를 비활성화해야합니다.
 
 -
+
 ### APIClient
 Django의 기존 `Client`클래스를 확장합니다.
 
@@ -190,6 +195,7 @@ client = APIClient(enforce_csrf_checks=True)
 평소처럼 CSRF 유효성검사는 세션 인증 된 views에만 적용됩니다. 즉, 클라이언트가 `login()`을 호출하려 로그인한 경우에만 CSRF 유효성 검사가 수행됩니다.
 
 -
+
 ### RequestsClient
 RESR 프레임워크에는 `request`(Python 라이브러리)를 사용하여 애플리케이션과 상호 작용하는 client도 포함되어 있습니다. 다음과 같은 경우 유용하게 사용할 수 있습니다.
 
@@ -245,6 +251,7 @@ assert response.status_code == 200
 이럼 스타일로 몇 가지 핵심 기능 중 일부에 대한 기본 테스트를 만드는 것은 실제 서비스를 확인하는 강력한 방법입니다. 이렇게하려면 테스트가 고객 데이터에 직접 영향을 주지 않는 방식으로 실행되도록 설정 및 해제하는데 신중을 기해야합니다.
 
 -
+
 ### CoreAPIClient
 `CoreAPIClient`를 사용하면 `coreapi` (Python 클라이언트 라이브러리)를 사용하여 API와 상호 작용할 수 있습니다.
 
@@ -273,6 +280,7 @@ client = CoreAPIClient()
 client.session.auth = HTTPBasicAuth('user', 'pass')
 client.session.headers.update({'x-test': 'true'})
 ```
+
 -
 
 ### Test cases
