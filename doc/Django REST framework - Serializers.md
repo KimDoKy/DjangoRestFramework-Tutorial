@@ -10,7 +10,7 @@
 
 Serializers는 쿼리셋들 및 모델 인스턴스와 같은 복잡한 데이터를 `JSON`, `XML` 또는 기타 컨텐트 유형으로 쉽게 렌더링 할 수 있는 Python 기본 데이터 유형으로 변환해 줍니다. 또한 serializer는 deserialization을 제공하여, 들어오는 데이터의 유효성을 처음 확인한 후에 구문 분석 된 데이터를 복합 형식으로 다시 변환 할 수 있습니다.  
 >
-`DJango`에서 `Client`으로 복잡한 데이터(모델 인스턴스 등)를 보내려면 'string'으로 변환해야합니다. 이 변환을 **`serializer`** 라고 합니다. 반대로 `client`의 'string'을 Djagno로 받을 때 Python 기본 데이터 유형으로 받아야 하는데 이 변환을 **`deserializer`**라고 합니다.
+>`DJango`에서 `Client`으로 복잡한 데이터(모델 인스턴스 등)를 보내려면 'string'으로 변환해야합니다. 이 변환을 **`serializer`** 라고 합니다. 반대로 `client`의 'string'을 Djagno로 받을 때 Python 기본 데이터 유형으로 받아야 하는데 이 변환을 **`deserializer`**라고 합니다.
 
 REST 프레임워크의 serializers는 Django의 `Form` 및 `modelForm` 클래스와 매우 유사하게 작동합니다. REST 프레임워크는 `ModelSerializer`(모델 인스턴스와 쿼리셋을 다루는 시리얼라이저를 생성하기 유용한 클래스)뿐만 아니라 응답의 출력을 제어하는 강력하고 일반적인 방법을 제공하는 `Serializer` 클래스를 제공합니다.
 
