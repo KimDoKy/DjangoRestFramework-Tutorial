@@ -1,49 +1,49 @@
-# Django REST framework
+# Django REST framework - Serializer fields
 
 ## Serializer fields
-Core arguments
+### Core arguments
 ## Boolean fields
-BooleanField
-NullBooleanField
+### BooleanField
+### NullBooleanField
 ## String fields
-CharField
-EmailField
-RegexField
-SlugField
-URLField
-UUIDField
-FilePathField
-IPAddressField
+### CharField
+### EmailField
+### RegexField
+### SlugField
+### URLField
+### UUIDField
+### FilePathField
+### IPAddressField
 ## Numeric fields
-IntegerField
-FloatField
-DecimalField
+### IntegerField
+### FloatField
+### DecimalField
 ## Date and time fields
-DateTimeField
-DateField
-TimeField
-DurationField
+### DateTimeField
+### DateField
+### TimeField
+### DurationField
 ## Choice selection fields
-ChoiceField
-MultipleChoiceField
+### ChoiceField
+### MultipleChoiceField
 ## File upload fields
-Parsers and file uploads.
-FileField
-ImageField
+### Parsers and file uploads.
+### FileField
+### ImageField
 ## Composite fields
-ListField
-DictField
-JSONField
+### ListField
+### DictField
+### JSONField
 ## Miscellaneous fields
-ReadOnlyField
-HiddenField
-ModelField
-SerializerMethodField
+### ReadOnlyField
+### HiddenField
+### ModelField
+### SerializerMethodField
 ## Custom fields
-Examples
+### Examples
 ## Third party packages
-DRF Compound Fields
-DRF Extra Fields
-djangrestframework-recursive
-django-rest-framework-gis
-django-rest-framework-hstore
+### DRF Compound Fields
+### DRF Extra Fields
+### djangrestframework-recursive
+### django-rest-framework-gis
+### django-rest-framework-hstore

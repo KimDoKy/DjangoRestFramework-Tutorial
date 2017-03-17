@@ -1,4 +1,4 @@
-# Django REST framework
+# Django REST framework - Serializer relations
 
 ## Serializer relations
 ### Inspecting relationships.

@@ -1,12 +1,13 @@
-# Django REST framework
- 
+# Django REST framework - Serializers
+
+---
+
+_"Expanding the usefulness of the serializers is something that we would like to address. However, it's not a trivial problem, and it will take some serious design work."  
+"serializer의 유용성을 확장하는 것은 우리가 다루고자 하는 것입니다. 그러나, 그것은 사소한 문제가 아니며. 심각한 디자인 작업을 필요로 합니다."  
+— Russell Keith-Magee  _
 
 ## Serializers
-
 ![](./images/serializer.jpeg)
-
-"Expanding the usefulness of the serializers is something that we would like to address. However, it's not a trivial problem, and it will take some serious design work."
-— Russell Keith-Magee   
 
 Serializers는 쿼리셋들 및 모델 인스턴스와 같은 복잡한 데이터를 `JSON`, `XML` 또는 기타 컨텐트 유형으로 쉽게 렌더링 할 수 있는 Python 기본 데이터 유형으로 변환해 줍니다. 또한 serializer는 deserialization을 제공하여, 들어오는 데이터의 유효성을 처음 확인한 후에 구문 분석 된 데이터를 복합 형식으로 다시 변환 할 수 있습니다.  
 >
