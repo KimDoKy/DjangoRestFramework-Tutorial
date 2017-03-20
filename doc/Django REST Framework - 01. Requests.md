@@ -18,7 +18,7 @@ REST 프레임워크의 Request 객체는 유연한 request 구문 분석 기능
 
 - 여기에는 파일과 파일이 아닌 입력을 포함하여 파싱 된 모든 내용이 포함됩니다.
 - `POST`가 아닌 `HTTP`메소드의 컨텐츠 분석을 지원합니다. 즉, `PUT`과 `PATCH` 요청의 컨텐츠에 액서스 할 수 있습니다.
-- 이는 form 테이터를 지원하는 것보다 REEST 프레임워크의 유연한 request 구문 분석을 지원합니다. 예를 들어, 들어오는 form 데이터를 처리하는 것과 같은 방식으로 들어오는 JSON 데이터를 처리 할 수 있습니다.
+- 이는 form 테이터를 지원하는 것보다 REST 프레임워크의 유연한 request 구문 분석을 지원합니다. 예를 들어, 들어오는 form 데이터를 처리하는 것과 같은 방식으로 들어오는 JSON 데이터를 처리 할 수 있습니다.
 더 자세한 내용은 [parsers documentation](http://www.django-rest-framework.org/api-guide/parsers/)을 참조하세요.
 
 ### .query_params
@@ -39,7 +39,7 @@ REST 프레임워크의 Request 객체는 유연한 request 구문 분석 기능
 request는 콘텐츠 협상 단계의 결과를 결정할 수 있는 몇가지 속성을 제공합니다. 이를 통해 다양한 미디어 유형에 대해 다른 serializer 스키마를 선택하는 것과 같은 동작을 구현할 수 있습니다.
 
 ### .accepted_renderer
-renderer 인스턴스는 컨텐프 협상 단계에서 선택된 인스턴스입니다.
+renderer 인스턴스는 컨텐츠 협상 단계에서 선택 된 인스턴스입니다.
 
 ### .accepted_media_type
 내용 협상 단계에서 수락 한 미디어 유형을 나타내는 문자열입니다.
@@ -49,7 +49,7 @@ renderer 인스턴스는 컨텐프 협상 단계에서 선택된 인스턴스입
 ## Authentication (입증)
 REST 프레임워크는 다음과 같은 기능을 제공하는 유연한 request 별 인증을 제공합니다.
 
-- API의 다른 부분에 대해 서로 다르 인증 정책을 사용합니다.
+- API의 다른 부분에 대해 서로 다른 인증 정책을 사용합니다.
 - 다중 인증 정책의 사용을 지원합니다.
 - 들어오는 request와 관련된 사용자와 토큰 정보를 제공합니다.
 
@@ -59,7 +59,7 @@ request이 인증되지 않은 경우 request.user의 기본값은 `django.contr
 자세한 내용은 [authentication documentation](http://www.django-rest-framework.org/api-guide/authentication/)을 참조하세요.
 
 ### .auth
-`request.auth`는 추가 인증 컨텍스트를 리턴합니다. `request.auth`의 정확한 작동은 사용되는 인증 정채에 따라 다르지만 대개 request가 인증 된 토큰의 인스턴스 일 수 있습니다.  
+`request.auth`는 추가 인증 컨텍스트를 리턴합니다. `request.auth`의 정확한 작동은 사용되는 인증 정책에 따라 다르지만 대개 request가 인증 된 토큰의 인스턴스 일 수 있습니다.  
 request가 인증되지 않았거나 추가 컨텍스트가 없는 경우, `request.auth`의 기본값은 없습니다.  
 자세한 내용은 [authentication documentation](http://www.django-rest-framework.org/api-guide/authentication/)을 참조하세요.
 
@@ -73,7 +73,7 @@ request가 인증되지 않았거나 추가 컨텍스트가 없는 경우, `requ
 REST 프레임워크는 브라우저 기반의 `PUT`, `PATCH`, `DELETE` form과 같은 몇 가지 브라우저 개선 사항을 지원합니다.
 
 ### .method
-`request.method`는 request의 HTTP 메소드의 **uppercased(대문자)**로 된 문자열 표현을 리턴합니다.  
+`request.method`는 request의 HTTP 메소드의 **uppercased**(대문자)로 된 문자열 표현을 리턴합니다.  
 브라우저 기반의 `PUT`, `PATCH` 및 `DELETE` form이 투명하게 지원됩니다.  
 자세한 내용은 [browser enhancements documentation](http://www.django-rest-framework.org/topics/browser-enhancements/)을 참조하세요.
 
