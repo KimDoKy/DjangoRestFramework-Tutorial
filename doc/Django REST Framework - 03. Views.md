@@ -16,8 +16,8 @@ REST 프레임워크는 Django의 `View` 클래스를 하위 클래스로 하는
 
 - 핸들러 메서드에 전달 된 `Request`는 Django의 `HttpRequest` 인스턴스가 아닌 REST 프레임워크의 `request`인스턴스가 됩니다.
 - 핸들러 메서드는 Django의 `HttpResponse` 대신 REST 프레임워크의 `Response`를 반환 할 수 있습니다. 뷰는 콘텐츠 협상을 관리하고 `response`에서 올바른 렌더러를 설정합니다.
-- 모든 `APIException` 예외가 발견되어 적절한 `response`으로 조정됩니다.
-- 들어오는 request가 인증이 된 request를 핸들러 메서드에 보내기 전에 적절한 권한과 `/` 또는 `throttle(계기판?)` 체크를 실행합니다.
+- 모든 `APIException` 예외가 발견되면 적절한 `response`으로 조정됩니다.
+- 들어오는 request가 인증이 된 request를 핸들러 메서드에 보내기 전에 적절한 권한과 `/` 또는 `throttle(제한)` 체크를 실행합니다.
 
 `APIView` 클래스를 사용하는 것은 일반 `View`클래스를 사용하는 것과 거의 같습니다. 들어오는 request은 `.get()`이나 `.post()`와 같은 적절한 핸들러 메서드로 전달됩니다. 또한 API 정책의 다양한 측면을 제어하는 여러 속성을 클래스에 설정 할 수 있습니다.
 
@@ -47,7 +47,7 @@ class ListUsers(APIView):
 ```
 
 ### API policy attributes(API 정책 속성)
-다음 속성들은 API view의 플러그 가능한 부분을 제어합니다.
+다음 속성들은 API view의 플러그 가능한 부분을 제어합니다.  
 `.renderer_classes`  
 `.parser_classes`  
 `.authentication_classes`  
@@ -79,7 +79,7 @@ class ListUsers(APIView):
 일반적으로 이 메서드를 재정의 할 필요는 없습니다.
 
 #### `.handle_exception(self, exc)`
-핸들러 메서드에 의해 내동댕이 쳐진 예외는 `Resopnse`인스턴스를 반환하거나 예외를 다시 발생시키는 이 메서드로 전달됩니다.  
+핸들러 메서드에 의해 버려진 예외는 `Resopnse`인스턴스를 반환하거나 예외를 다시 발생시키는 이 메서드로 전달됩니다.  
 기본 구현에서는 Django의 `Http404`와 `PermissionDenied`예외 뿐만 아니라 `rest_framework.exceptions.APIXeception`의 하위 클래스를 처리하고 적절한 오류 response를 반환합니다.  
 API에서 반환하는 오류 response를 사용자 정의해야하는 경우 이 메소드를 서브 클래스화해야 합니다.
 
