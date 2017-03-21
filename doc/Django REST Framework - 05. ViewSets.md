@@ -14,7 +14,7 @@ _— Ruby on Rails Documentation_
 Django REST 프레임워크를 사용하면 `ViewSet`이라고하는 단일 클래스에서 `ViewSet`에 대한 논리를 결합할 수 있습니다. 다른 프레임워크에서는 `Resources`나 `Controllers`와 같은 개념적으로 유사한 구현을 찾을 수도 있습니다.  
 `ViewSet` 클래스는 단순히 `.get()`이나 `.post()`과 같은 메소드 핸들러를 제공하지 않고 클래스 기반의 view 유형이며, 대신 `.list()`와 `.create()`와 같은 액션을 제공합니다.  
 `ViewSet`의 메서드 핸들러는 `.as_view()`메서드를 사용하여 뷰를 마무리하는 시점의 해당 액션에만 바인딩됩니다.
->바인딩:각 종 값들이 확정되어 더이상 변경할수 없는 상태가 되는것. 식별자(identifier)가 그 대상인 메모리 주소, 데이터형 또는 실제값으로 배정되는 것
+>바인딩 : 각종 값들이 확정되어 더이상 변경 할 수 없는 상태가 되는것. 식별자(identifier)가 그 대상인 메모리 주소, 데이터형 또는 실제값으로 배정되는 것
 
 일반적으로 urlconf의 viewset에 뷰를 명시적을 등록하는 대신 viewset을 `router`클래스로 등록하면 자동으로 urlconf가 결정됩니다.
 
@@ -49,7 +49,7 @@ class UserViewSet(viewsets.ViewSet):
 user_list = UserViewSet.as_view({'get': 'list'})
 user_detail = UserViewSet.as_view({'get': 'retrieve'})
 ```
-전형적으로 우리는 이것을 하지 않을 것이지만, 대신 viewset을 라우터에 등록하고 urlconf가 자동으로 생헝되도록 할 것입니다. 
+평소엔 우리는 이것을 하지 않을 것이지만, 대신 viewset을 라우터에 등록하고 urlconf가 자동으로 생성되도록 할 것입니다. 
 
 ```python
 from myapp.views import UserViewSet
@@ -59,7 +59,7 @@ router = DefaultRouter()
 router.register(r'users', UserViewSet)
 urlpatterns = router.urls
 ```
-자신 만의 viewset를 작성하는 대신, 기본 동작 set을 제공하는 기존 기본 클래스를 사용하는 것이 좋습니다. 예를 들어:
+자신만의 viewset를 작성하는 대신, 기본 동작 set을 제공하는 기존 기본 클래스를 사용하는 것이 좋습니다. 예를 들어:
 
 ```python
 class UserViewSet(viewsets.ModelViewSet):
@@ -74,7 +74,7 @@ class UserViewSet(viewsets.ModelViewSet):
 - 반복 논리를 하나의 클래스로 결합 할 수 있습니다. 위의 예에서 쿼리셋은 한번만 지정하면 여러 view에서 사용됩니다.
 - router를 사용함으로써 우리는 더 이상 URLconf의 연결을 처리 할 필요가 없습니다.  
 
-이 두가지 모두 장단점이 있습니다. 이반 viewd와 URL conf를 사용하면 보다 명확하게 제어할 수 있습니다. `ViewSet`는 신속하게 시작하고 실행하려는 경우, 또는 대규모 API가 있고 전체적으로 일관된 URL conf를 적용하려는 경우 유용합니다.
+이 두가지 모두 장단점이 있습니다. 일반 views와 URL conf를 사용하면 보다 명확하게 제어할 수 있습니다. `ViewSet`는 신속하게 시작하고 실행하려는 경우, 또는 대규모 API가 있고 전체적으로 일관된 URL conf를 적용하려는 경우 유용합니다.
 
 ### Marking extra actions for routing
 REST 프레임워크에 포함 된 기본 router는 아래와 같이 `creste`/`retirieve`/`update`/`destroy` 스타일 작업의 기본 set을 위한 경로를 제공합니다.
@@ -151,7 +151,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(recent_users, many=True)
         return Response(serializer.data)
 ```
-데코레이터는 라우트 된 뷰에 대해서만 설정 할 추가인수를 추가로 취할 수 있습니다. 예를 들어..
+데코레이터는 라우트 된 뷰에 대해서만 설정 할 추가 인수를 추가로 취할 수 있습니다. 예를 들어..
 
 ```python
     @detail_route(methods=['post'], permission_classes=[IsAdminOrIsSelf])
@@ -229,7 +229,7 @@ class AccountViewSet(viewsets.ReadOnlyModelViewSet):
 `ModelViewSet`과 마찬가지로 `GenericAPIView`에서 사용할 수 있는 표준 속성과 메소드 오버라이드를 사용할 수 있습니다.
 
 ## Custom ViewSet base classes
-`ModelViewSet` 액션의 전체 set가 없거나 다른 방식으로 동작을 사용자 정의하는 custom `ViewSet`클래스를 제공해야 할 수도 있습니다.
+`ModelViewSet` 액션의 전체 set이 없거나 다른 방식으로 동작을 사용자 정의하는 custom `ViewSet`클래스를 제공해야 할 수도 있습니다.
 
 ### Example
 `create`, `list`, `retrieve` 조작을 제공하고, `GenericViewSet`에서 상속하며, 필요한 조치를 `mixin`하는 기본 viewset를 작성하려면 다음을 작성하세요.
