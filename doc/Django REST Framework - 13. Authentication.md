@@ -328,28 +328,21 @@ HTTP 서명 (현재 [IETF 초안](https://datatracker.ietf.org/doc/draft-cavage-
 ### django-rest-knox
 [Django-rest-knox](https://github.com/James1345/django-rest-knox) 라이브러리는 단일 페이지 응용 프로그램 및 모바일 클라이언트를 염두에 두고 기본 TokenAuthentication 체계보다 안전하고 확장 가능한 방식으로 토큰 기반 인증을 처리 할 수 있는 모델과 뷰를 제공합니다. 클라이언트 별 토큰 및 일부 다른 인증 (일반적으로 기본 인증)이 제공된 경우 생성하는 View, 토큰을 삭제 (서버 강제 로그 아웃 제공) 및 모든 토큰 삭제(사용자가 로그인 한 모든 클라이언트 로그 아웃) view를 제공합니다.).
 
+---
 
+## 추가 내용 (Token 등록 및 삭제)
 
+**`member_myuser`**
+![](./images/token1.png)
+**`authtoken_token`**
+![](./images/token2.png)
+**`postman`에서 토큰 생성**
+![](./images/token3.png)
 
+`token`의 `user_id` 값은 `member_myuser`의 `id` 값으로 등록됩니다.  
+postman에서 생성한 test5(username)의 `myuser`테이블에서의 id 값은 8이고, 해당 토큰값으로 `token`테이블을 비교해보면 `user_id`가 같은 것을 확인할 수 있습니다.  
 
+`token` 삭제는 해당 토큰값의 계정으로 로그인해야 삭제가 가능합니다.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+![](./images/token_delete.png)
+> `request.user`를 프린트해보면 `username`값이 조회됩니다.
