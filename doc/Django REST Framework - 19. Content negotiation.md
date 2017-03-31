@@ -2,7 +2,7 @@
 
 ---
 
-_"HTTP has provisions for several mechanisms for "content negotiation" - the process of selecting the best representation for a given response when there are multiple representations available."_  
+_"HTTP has provisions for several mechanisms for "content negotiation" - the proce반s of selecting the best representation for a given response when there are multiple representations available."_  
 
 _"HTTP는 "내용 협상 (content negotiation)"에 대한 몇 가지 메커니즘에 대한 규정을 제공합니다. 이는 여러 표현을 사용할 수 있는 경우 주어진 응답에 대한 최상의 표현을 선택하는 프로세스입니다."_  
 
@@ -80,7 +80,7 @@ REST_FRAMEWORK = {
     'DEFAULT_CONTENT_NEGOTIATION_CLASS': 'myapp.negotiation.IgnoreClientContentNegotiation',
 }
 ```
-`APIView` 클래스 기반 view를 사용하여 개별 view 또는 viewset에 사용 된 content negotiation을 설정할 수도 있습니다.
+`APIView` CBV를 사용하여 개별 view 또는 viewset에 사용 된 content negotiation을 설정할 수도 있습니다.
 
 ```python
 from myapp.negotiation import IgnoreClientContentNegotiation

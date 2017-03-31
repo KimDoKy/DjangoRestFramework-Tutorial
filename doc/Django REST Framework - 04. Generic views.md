@@ -9,7 +9,7 @@ _— Django Documentation_
 ---
 
 ## Generic views
-클래스 기반 view의 주요 이점 중 하나는 재사용이 가능한 동작을 구성하는 것입니다. REST 프레임워크는 일반적으로 사용되는 패턴을 제공하는 다수의 dict에 빌드 된 view를 제공함으로써 이를 활용합니다.  
+ CBV의 주요 이점 중 하나는 재사용이 가능한 동작을 구성하는 것입니다. REST 프레임워크는 일반적으로 사용되는 패턴을 제공하는 다수의 dict에 빌드 된 view를 제공함으로써 이를 활용합니다.  
 REST 프레임워크에서 제공하는 generic view를 사용하면 데이터베이스 모델과 밀접하게 매핑되는 API 뷰를 빠르게 빌드 할 수 있습니다.  
 `generic views` 가 API의 요구 사항에 맞지 않으면 정규 `APIView`클래스를 사용하여 drop down 하거나 `generic views`에서 사용하는 `mixin`과 기본 클래스를 재사용하여, 자신만 재사용이 가능한 `generic views` set를 작성할 수 있습니다.
 
@@ -94,7 +94,7 @@ def get_queryset(self):
 ```
 get_object(self)
 ```
-**`detail views`**에 사용해야 하는 객체 인스턴스를 반환합니다. 기본적으로 `lookup_field`매개변수를 사용하여 기본 쿼리셋을 필터링합니다.  
+**`detail views`**에 사용해야 하는 객체 인스턴스를 반환합니다. 기본적으로 `lookup_field` parameter를 사용하여 기본 쿼리셋을 필터링합니다.  
 둘 이상의 `URL kwarg`를 기반으로 하는  `object lookups`와 같이 복잡한 동작을 제공하기 위해 무시될 수 있습니다.
 
 예를 들어:
@@ -314,53 +314,3 @@ class BaseRetrieveUpdateDestroyView(MultipleFieldLookupMixin,
 
 ### Django Rest Multiple Models
 [Django Rest Multiple Models](https://github.com/Axiologue/DjangoRestMultipleModels)은 단일 API request을 통해 여러 serializer된 모델 및 `/` 또는 쿼리셋을 전송하기 위한 generic views(and mixin)을 제공합니다.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

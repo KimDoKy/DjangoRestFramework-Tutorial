@@ -49,7 +49,7 @@ class ExampleView(APIView):
     def post(self, request, format=None):
         return Response({'received data': request.data})
 ```
-또는 함수 기반 view와 함께 `@api_view`데코레이터를 사용하는 경우.
+또는 FBV와 함께 `@api_view`데코레이터를 사용하는 경우.
 
 ```python
 from rest_framework.decorators import api_view
@@ -126,7 +126,7 @@ request의 본문을 나타내는 스트림과 같은 객체입니다.
 
 ### media_type
 선택사항. 제공되는 경우 들어오는 request content의 미디어 타입입니다.  
-request의 `Content-Type:` 헤더에 따라 렌더러의 `media_type`속성보다 더 구체적일 수 있으며, 미디어 타입 매개변수가 포함 될 수 있습니다. 예: `"text/plain; charset=utf-8"`
+request의 `Content-Type:` 헤더에 따라 렌더러의 `media_type`속성보다 더 구체적일 수 있으며, 미디어 타입 parameter가 포함 될 수 있습니다. 예: `"text/plain; charset=utf-8"`
 
 ### parser_context
 선택사항. 이 인수가 제공되면 request content을 파싱하는데 필요할 수 있는 추가 context를 포함하는 dict가 됩니다.  

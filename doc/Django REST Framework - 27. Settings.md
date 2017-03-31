@@ -148,12 +148,12 @@ pagination 스타일 설정에 대한 자세한 지침은 [setting the paginatio
 
 ---
 #### SEARCH_PARAM
-`SearchFilter`가 사용하는 검색어를 지정하는데 사용 할 수 있는 검색어 매개 변수의 이름입니다.  
+`SearchFilter`가 사용하는 검색어를 지정하는데 사용 할 수 있는 검색어 parameter의 이름입니다.  
 
 Default: `search`  
 
 #### ORDERING_PARAM
-`OrderingFilter`에 의해 반환 된 결과의 순서를 지정하는데 사용할 수 있는 쿼리 매개 변수의 이름입니다.  
+`OrderingFilter`에 의해 반환 된 결과의 순서를 지정하는데 사용할 수 있는 쿼리 parameter의 이름입니다.  
 
 Default: `ordering`
 
@@ -172,7 +172,7 @@ Default: `None`
 Default: `none`  
 
 #### VERSION_PARAM
-미디어 타입 또는 URL 쿼리 매개변수와 같이 모든 버젼 지정 매개변수에 사용해야하는 문자열입니다.  
+미디어 타입 또는 URL 쿼리 parameter와 같이 모든 버젼 지정 parameter에 사용해야하는 문자열입니다.  
 
 Default: `version`
 
@@ -197,7 +197,7 @@ default: `None`
 다음 설정은 APIRequestFactory 및 APIClient의 동작을 제어합니다.  
 
 #### `TEST_REQUEST_DEFAULT_FORMAT`
-테스트 요청을 할때 가용해야하는 기본 형식입니다.  
+테스트 요청을 할때 사용해야하는 기본 형식입니다.  
 이 값은 `TEST_REQUEST_RENDERER_CLASSES`설정의 renderer 클래스 중 하나의 형식과 일치해야합니다.  
 
 Default: `'multipart'`

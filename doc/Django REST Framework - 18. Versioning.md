@@ -74,7 +74,7 @@ class ProfileList(APIView):
 
 - `DEFAULT_VERSION` : 버전 정보가 없는 경우 `request.version`에 사용해야 하는 값입니다. 기본값은 `None`입니다.
 - `ALLOWED_VERSIONS` : 이 값을 설정하면 versioning scheme에서 반환 할 수 있는 버전 집합이 제한되며 제공된 버전이 이 집합에 없는 경우 오류가 발생합니다. `DEFAULT_VERSION` 설정에 사용 된 값은 항상 `ALLOWED_VERSIONS`  set의 일부로 간주됩니다 (단, `None`이 아닌 경우). 기본값은 `None`입니다.
-- `VERSION_PARAM` : 미디어 유형 또는 URL 쿼리 매개 변수와 같이 모든 버전 지정 매개 변수에 사용해야하는 문자열입니다. 기본값은 `'version'`입니다.
+- `VERSION_PARAM` : 미디어 유형 또는 URL 쿼리 parameter와 같이 모든 버전 지정 parameter에 사용해야하는 문자열입니다. 기본값은 `'version'`입니다.
 
 또한 고유한 versioning scheme를 정의하고 `default_version`, `allowed_version` 및 `version_param`클래스 변수를 사용하여 버전 별 또는 뷰 set 별로 세 가지 값을 더한 버전 클래스를 설정할 수 있습니다. 예를 들어, `URLPathVersioning`를 사용하려면 다음과 같이 하십시오.
 
@@ -96,7 +96,7 @@ class ExampleView(APIVIew):
 ## API Reference
 
 ### AcceptHeaderVersioning
-이 scheme는 클라이언트가 `Accept` 헤더의 미디어 타입의 일부로 버전을 지정하도록 요구합니다. 이 버전은 기본 미디어 타입을 보완하는 미디어 타입 매개 변수로 포함됩니다.  
+이 scheme는 클라이언트가 `Accept` 헤더의 미디어 타입의 일부로 버전을 지정하도록 요구합니다. 이 버전은 기본 미디어 타입을 보완하는 미디어 타입 parameter로 포함됩니다.  
 다음 accept 헤더 versioning 스타일을 사용하는 HTTP request의 예입니다.
 
 ```
@@ -108,7 +108,7 @@ Accept: application/json; version=1.0
 Accept 헤더에 기반한 versioning는 [일반적](http://blog.steveklabnik.com/posts/2011-07-03-nobody-understands-rest-or-http#i_want_my_api_to_be_versioned)으로 [모범 사례](https://github.com/interagent/http-api-design/blob/master/en/foundations/require-versioning-in-the-accepts-header.md)로 간주되지만 클라이언트 요구 사항에 따라 다른 스타일이 적합할 수도 있습니다.  
 
 #### Using accept headers with vendor media types
-엄밀히 말하자면 `json` 미디어 타입은 [추가 매개 변수](http://tools.ietf.org/html/rfc4627#section-6)를 포함하는 것으로 지정되지 않습니다. 잘 정의 된 공개 API를 작성하는 경우 [vendor media type](https://en.wikipedia.org/wiki/Internet_media_type#Vendor_tree)을 사용하는 것이 좋습니다. 이렇게 하려면 custom 미디어 타입으로 `JSON` 기반 렌더러를 사용하도록 렌더러를 구성하세요.
+엄밀히 말하자면 `json` 미디어 타입은 [추가 parameter](http://tools.ietf.org/html/rfc4627#section-6)를 포함하는 것으로 지정되지 않습니다. 잘 정의 된 공개 API를 작성하는 경우 [vendor media type](https://en.wikipedia.org/wiki/Internet_media_type#Vendor_tree)을 사용하는 것이 좋습니다. 이렇게 하려면 custom 미디어 타입으로 `JSON` 기반 렌더러를 사용하도록 렌더러를 구성하세요.
 
 ```python
 class BookingsAPIRenderer(JSONRenderer):
@@ -193,7 +193,7 @@ Accept: application/json
 hostname versioning scheme는 여러 API 버전에 대해 서로 다른 DNS 레코드를 구성할 수 있으므로 들어오는 request를 버전에 따라 다른 서버로 라우팅해야하는 경우에 특히 유용합니다.
 
 ### QueryParameterVersioning
-이 스키마는 URL에 쿼리 매개 변수로 버전을 포함하는 간단한 스타일입니다. 예:
+이 스키마는 URL에 쿼리 parameter로 버전을 포함하는 간단한 스타일입니다. 예:
 
 ```
 GET /something/?version=0.1 HTTP/1.1

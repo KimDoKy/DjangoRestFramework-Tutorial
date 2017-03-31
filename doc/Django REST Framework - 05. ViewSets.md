@@ -12,7 +12,7 @@ _— Ruby on Rails Documentation_
 
 ## ViewSets	
 Django REST 프레임워크를 사용하면 `ViewSet`이라고하는 단일 클래스에서 `ViewSet`에 대한 논리를 결합할 수 있습니다. 다른 프레임워크에서는 `Resources`나 `Controllers`와 같은 개념적으로 유사한 구현을 찾을 수도 있습니다.  
-`ViewSet` 클래스는 단순히 `.get()`이나 `.post()`과 같은 메소드 핸들러를 제공하지 않고 클래스 기반의 view 유형이며, 대신 `.list()`와 `.create()`와 같은 액션을 제공합니다.  
+`ViewSet` 클래스는 단순히 `.get()`이나 `.post()`과 같은 메소드 핸들러를 제공하지 않고 CBV 유형이며, 대신 `.list()`와 `.create()`와 같은 액션을 제공합니다.  
 `ViewSet`의 메서드 핸들러는 `.as_view()`메서드를 사용하여 뷰를 마무리하는 시점의 해당 액션에만 바인딩됩니다.
 >바인딩 : 각종 값들이 확정되어 더이상 변경 할 수 없는 상태가 되는것. 식별자(identifier)가 그 대상인 메모리 주소, 데이터형 또는 실제값으로 배정되는 것
 
@@ -248,28 +248,3 @@ class CreateListRetrieveViewSet(mixins.CreateModelMixin,
     pass
 ```
 고유한 기본 `ViewSet`클래스를 작성하여 API 전반에 걸쳐 여러 viewset에서 재사용 할 수 있는 공통적인 동작을 제공할 수 있습니다.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

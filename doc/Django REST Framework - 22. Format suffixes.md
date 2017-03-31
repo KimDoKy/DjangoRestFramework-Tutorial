@@ -76,47 +76,13 @@ urlpatterns = i18n_patterns(
 ---
 
 ### Query parameter formats
-format suffixe의 대신 요청 된 쿼리 매개 변수에 포함시키는 것입니다. REST 프레임워크는 기본적으로 옵션을 제공하며, 검색 가능한 API에서 사용 가능한 다양한 표현을 전환하는데 사용됩니다.  
-짧은 형식을 사용하여 표현을 선택하려면 `format` 쿼리 매개 변수를 사용하십시오. 예 : `http://example.com/organizations/?format=csv`  
-이 쿼리 매개 변수의 이름은 `URL_FORMAT_OVERRIDE`설정을 사용하여 수정할 수 있습니다. 이 동작을 사용하지 않으려면 값을 `None`으로 설정하세요.
+format suffixe의 대신 요청 된 쿼리 parameter에 포함시키는 것입니다. REST 프레임워크는 기본적으로 옵션을 제공하며, browsable API에서 사용 가능한 다양한 표현을 전환하는데 사용됩니다.  
+짧은 형식을 사용하여 표현을 선택하려면 `format` 쿼리 parameter를 사용하십시오. 예 : `http://example.com/organizations/?format=csv`  
+이 쿼리 parameter의 이름은 `URL_FORMAT_OVERRIDE`설정을 사용하여 수정할 수 있습니다. 이 동작을 사용하지 않으려면 값을 `None`으로 설정하세요.
 
 ### Accept headers vs. format suffixes
 파일 이름 확장자는 RESTfull 패턴이 아니면 HTTP Accept 헤더가 항상 대신 사용되어야 한다는 웹 커뮤니티의 견해가 있는 것 같습니다.  
-그것은 실제론 오해입니다. 예를 들어 Roy Fileding은 쿼리 매개 변수 미디어 타입 표시기와 파일 확장 미디어 타입 표시기의 상대적 장점에 대해 다음과 같이 설명합니다.  
+그것은 실제론 오해입니다. 예를 들어 Roy Fileding은 쿼리 parameter 미디어 타입 표시기와 파일 확장 미디어 타입 표시기의 상대적 장점에 대해 다음과 같이 설명합니다.  
 _"그래서 나는 항상 확장 프로그램을 선호합니다. 어느 선택도 REST와는 아무런 관련이 없습니다. "- Roy Fielding, REST 토론 메일 링리스트_  
 
 인용문에는 Accept Headers가 언급되어 있지 않지만 format suffix는 허용되는 패턴으로 간주되어야 한다는 점을 분명히 합니다.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

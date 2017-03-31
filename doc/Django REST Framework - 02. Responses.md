@@ -72,24 +72,3 @@ response['Cache-Control'] = 'no-cache'
 **Signature**: `.render()`  
 다른 `TemplateResponse`와 마찬가지로 이 메소드는 응답의 serializer 된 데이터를 최종 response 컨텐츠로 렌더링하기 위해 호출됩니다. `.render()`가 호출되면 `accept_renderer`인스턴스에서 `.render (data, accepted_media_type, renderer_context)` 메서드를 호출 한 결과로 response 내용이 설정됩니다.  
 일반적으로 Django의 표준 응답주기에 의해 처리되므로 `.render()`를 직접 호출 할 필요가 없습니다.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

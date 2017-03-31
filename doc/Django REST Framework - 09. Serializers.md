@@ -205,7 +205,7 @@ class BlogPostSerializer(serializers.Serializer):
 ```
 
 ---
-**NOTE** : `<field_name>`이 `required=False` 매개 변수를 사용하여 `serializer`에서 선언 된 경우, 필드가 포함되어 있지 않으면 이 유효성 검사 단계가 수행되지 않습니다.
+**NOTE** : `<field_name>`이 `required=False` parameter를 사용하여 `serializer`에서 선언 된 경우, 필드가 포함되어 있지 않으면 이 유효성 검사 단계가 수행되지 않습니다.
 
 ---
 #### 객체 수준 유효성 검사
@@ -850,8 +850,8 @@ serializer 클래스에서 지원할 기능에 따라 무시할 수있는 네 �
 - `.to_internal_value()` - 쓰기 조작을 위해 deserializer를 지원하려면 오버라이드하세요.
 - `.create()`, `.update()` - 인스턴스 저장을 지원하기 위해 이들 중 하나나 둘다 무시하세요.
 
-이 클래스는 Serializer 클래스와 동일한 인터페이스를 제공하기 때문에 일반 `Serializer` 또는 `ModelSerializer`에서 사용하던 것과 똑같이 기존 클래스 기반 뷰와 함께 사용할 수 있습니다.  
-`BaseSerializer` 클래스는 브라우저 API에서 HTML 양식을 생성하지 않는다는 점에서 주목할 것입니다. 이는 반환하는 데이터에 각 필드를 적절한 HTML 입력으로 렌더링 할 수 있는 모든 필드 정보를 포함하지 않기 때문입니다.
+이 클래스는 Serializer 클래스와 동일한 인터페이스를 제공하기 때문에 일반 `Serializer` 또는 `ModelSerializer`에서 사용하던 것과 똑같이 기존 CBV와 함께 사용할 수 있습니다.  
+`BaseSerializer` 클래스는 browsable API에서 HTML 양식을 생성하지 않는다는 점에서 주목할 것입니다. 이는 반환하는 데이터에 각 필드를 적절한 HTML 입력으로 렌더링 할 수 있는 모든 필드 정보를 포함하지 않기 때문입니다.
 
 ### Read-only `BaseSerializer` classes
 `BaseSerializer` 클래스를 사용하여 읽기 전용 serializer를 구현하려면 `.to_representation()` 메서드를 재정의해야합니다. 간단한 Django 모델을 사용하는 예제를 살펴 보겠습니다.
@@ -1098,12 +1098,12 @@ REST 프레임워크2에서는 개발자가 `ModelSerializer`클래스가 기본
 ### HStoreSerializer
 [`django-rest-framework-hstore`](https://github.com/djangonauts/django-rest-framework-hstore)패키지는 [django-hstore](https://github.com/djangonauts/django-hstore) `DictionaryField` 모델 필드와 `schema-mode`기능을 지원하는 `HStoreSerializer`를 제공합니다.
 ### Dynamic REST
-[`Dynamic-Rest`](https://github.com/AltSchool/dynamic-rest) 패키지는 ModelSerializer 및 ModelViewSet 인터페이스를 확장하고 필터링, 정렬, serializer에서 정의한 모든 필드와 관계를 포함/제외하는 API 쿼리 매개변수를 추가합니다.
+[`Dynamic-Rest`](https://github.com/AltSchool/dynamic-rest) 패키지는 ModelSerializer 및 ModelViewSet 인터페이스를 확장하고 필터링, 정렬, serializer에서 정의한 모든 필드와 관계를 포함/제외하는 API 쿼리 parameter를 추가합니다.
 
 ### Dynamic Fields Mixin
-[`drf_dynamic-fields`](https://github.com/dbrgn/drf-dynamic-fields) 패키지는 serializer당 필드를 URL 매개변수로 지정된 서브 세트로 동적으로 제한하기 위해 mixin을 제공합니다.
+[`drf_dynamic-fields`](https://github.com/dbrgn/drf-dynamic-fields) 패키지는 serializer당 필드를 URL parameter로 지정된 서브 세트로 동적으로 제한하기 위해 mixin을 제공합니다.
 ### DRF FlexFields
-[`drf-flex-fields`](https://github.com/rsinger86/drf-flex-fields) 패키지는 ModelSerializer 및 ModelViewSet을 확장하여 필드를 동적으로 설정하고 기본 필드를 중첩 모델로 확장하는데, 일반적으로 사용되는 기능을 URL 매개 변수 및 serializer 클래스 정의에서 모두 제공합니다.
+[`drf-flex-fields`](https://github.com/rsinger86/drf-flex-fields) 패키지는 ModelSerializer 및 ModelViewSet을 확장하여 필드를 동적으로 설정하고 기본 필드를 중첩 모델로 확장하는데, 일반적으로 사용되는 기능을 URL parameter 및 serializer 클래스 정의에서 모두 제공합니다.
 
 ### Serializer Extensions
 [`django-rest-framework-serializer-extensions`](https://github.com/evenicoulddoit/django-rest-framework-serializer-extensions) 패키지는 보기/요청 단위로 필드를 정의 할 수있게 하여 serializer를 DRY 할 수 있는 도구 모음을 제공합니다. 필드를 허용 목록에 추가하고 블랙리스트에 올릴 수 있으며 자식 serializer를 선택적으로 확장 할 수 있습니다.
@@ -1115,7 +1115,7 @@ REST 프레임워크2에서는 개발자가 `ModelSerializer`클래스가 기본
 [`DRF-Base64`](https://bitbucket.org/levit_scs/drf_base64)는  base64 인코딩 파일을 업로드를 처리하는 일련의 필드와 model serializers를 제공합니다.
 
 ### QueryFields
-[`djangorestframework-queryfields`](http://djangorestframework-queryfields.readthedocs.io/en/latest/)를 사용하면 API 클라이언트가 포함/제외 검색어 매개 변수를 통해 응답에서 어떤 필드를 보낼지 지정할 수 있습니다.
+[`djangorestframework-queryfields`](http://djangorestframework-queryfields.readthedocs.io/en/latest/)를 사용하면 API 클라이언트가 포함/제외 검색어 parameter를 통해 응답에서 어떤 필드를 보낼지 지정할 수 있습니다.
 
 ### DRF Writable Nested
 [`drf-writable-nested`](https://github.com/Brogency/drf-writable-nested) 패키지는 중첩 된 관련 데이터로 모델을 작성/업데이트 할 수 있는 쓰기 가능한 중첩 model serializer를 제공합니다.

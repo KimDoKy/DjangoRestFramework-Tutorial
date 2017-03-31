@@ -35,7 +35,7 @@ REST_FRAMEWORK = {
 }
 ```
 `DEFAULT_THROTTLE_RATES`에 사용 된 rate에는 throttle 기간으로 `second`, `minute`, `hour`, `day`이 포함 될 수 있습니다.  
-또한 APIView 클래스 기반 뷰를 사용하여 뷰 단위 또는 뷰 단위별 조절 정책을 설정할 수 있습니다.
+또한 APIView CBV를 사용하여 뷰 단위 또는 뷰 단위별 조절 정책을 설정할 수 있습니다.
 
 ```python
 from rest_framework.response import Response
@@ -51,7 +51,7 @@ class ExampleView(APIView):
         }
         return Response(content)
 ```
-또는 함수기반 뷰와 함께 `@api_view`데코레이터를 사용하는 경우
+또는 FBV와 함께 `@api_view`데코레이터를 사용하는 경우
 
 ```python
 @api_view(['GET'])

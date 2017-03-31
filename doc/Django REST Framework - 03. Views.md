@@ -4,7 +4,7 @@
 
 _"Django's class-based views are a welcome departure from the old-style views."_  
 
-_"Django의 클래스 기반 뷰는 구식 뷰에서 출발하는 것을 환영합니다."_  
+_"Django의 CBV는 구식 뷰에서 출발하는 것을 환영합니다."_  
 
 _— Reinout van Rees_
 
@@ -99,7 +99,7 @@ _"[그 클래스 기반의 견해]가 항상 우월한 해결책은 실수라고
 
 _— Nick Coghlan_  
 
-REST 프레임워크를 사용하면 일반 함수 기반 views로 작업 할 수 있습니다. 그것은 간단한 Django `HttpRequest`가 아닌 `Request`의 인스턴스를 수신하고 Django `HttpResponse` 대신 `response`을 리턴 할 수 있도록 함수 기반의 뷰를 래핑하는 간단한 데코레이터 세트를 제공하며, request가 처리됩니다.  
+REST 프레임워크를 사용하면 일반 FBV로 작업 할 수 있습니다. 그것은 간단한 Django `HttpRequest`가 아닌 `Request`의 인스턴스를 수신하고 Django `HttpResponse` 대신 `response`을 리턴 할 수 있도록 FBV를 래핑하는 간단한 데코레이터 세트를 제공하며, request가 처리됩니다.  
 
 ### @api_view()
 **Signature**: `@api_view(http_method_names=['GET'], exclude_from_schema=False)`  
@@ -154,37 +154,3 @@ def view(request):
 - `@permission_classes(...)` 
  
 이러한 데코레이터 각각은 클래스의 `list`나 `tuple`인 단일 인수를 취합니다.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

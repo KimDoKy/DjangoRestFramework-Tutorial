@@ -40,7 +40,7 @@ REST_FRAMEWORK = {
     )
 }
 ```
-또한 `APIVIew` 클래스 기반의 view를 사용하여 view 단위 또는 view단위로 인증 체계를 구성할 수 있습니다.
+또한 `APIVIew` CBV를 사용하여 view 단위 또는 view단위로 인증 체계를 구성할 수 있습니다.
 
 ```python
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -59,7 +59,7 @@ class ExampleView(APIView):
         }
         return Response(content)
 ```
-또는 함수 기반 view와 함께 `@api_view`데코레이터를 사용하는 경우
+또는 FBV와 함께 `@api_view`데코레이터를 사용하는 경우
 
 ```pyhon
 @api_view(['GET'])

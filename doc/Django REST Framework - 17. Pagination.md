@@ -19,7 +19,7 @@ pagination API는 다음 중 하나를 지원할 수 있습니다.
 - resopnse 내용의 일부로 제공되는 pagination 링크
 - `Content-Range` 또는 `Link`와 같은 response header에 포함 된 pagination 링크  
 
-내장된 스타일은 현재 response 내용의 일부로 포함된 링크를 사용합니다. 이 스타일은 탐색 가능한 API를 사용할 때 더 쉽게 액서스 할 수 있습니다.  
+내장된 스타일은 현재 response 내용의 일부로 포함된 링크를 사용합니다. 이 스타일은 browsable API를 사용할 때 더 쉽게 액서스 할 수 있습니다.  
 pagination은 generic view 또는 viewset를 사용하는 경우에만 자동으로 수행됩니다. 일반 `APIView`를 사용하는 경우 pagination 된 response를 반환하도록 pagination API를 직접 호출해야 합니다. 예를 들어, `mixins.ListModelMixin` 및 `generics.GenericAPIView` 클래스의 소스 코드를 참조하세요.  
 pagination 클래스를 `None`으로 설정하면 pagination을 끌 수 있습니다.
 
@@ -72,7 +72,7 @@ REST_FRAMEWORK = {
 ## API Reference
 
 ### PageNumberPagination
-이 pagination 스타일은 request 쿼리 매개 변수에 단일 숫자 페이지 번호를 허용합니다.
+이 pagination 스타일은 request 쿼리 parameter에 단일 숫자 페이지 번호를 허용합니다.
 
 **Request**:  
 
@@ -112,16 +112,16 @@ REST_FRAMEWORK = {
 
 - `django_paginator_class` : 사용할 Django Paginator 클래스입니다. 기본값은 `django.core.paginator.Paginator`입니다. 대부분의 사용 사례에서 괜찮습니다.
 - `page_size` : 페이지 크기를 나타내는 숫자 값입니다. 설정된 경우 `PAGE_SIZE` 설정보다 우선합니다. 기본값은 `PAGE_SIZE` 설정 키와 동일한 값입니다.
-- `page_query_param` : pagination 컨트롤에 사용할 쿼리 매개 변수의 이름을 나타내는 문자열 값입니다.
-- `page_size_query_param` : 설정된 경우 클라이언트가 request 별로 페이지 크기를 설정할 수 있도록하는 쿼리 매개 변수의 이름을 나타내는 문자열 값입니다. 기본값은 `None`으로, 클라이언트가 요청 된 페이지 크기를 제어 할 수 없음을 나타냅니다.
+- `page_query_param` : pagination 컨트롤에 사용할 쿼리 parameter의 이름을 나타내는 문자열 값입니다.
+- `page_size_query_param` : 설정된 경우 클라이언트가 request 별로 페이지 크기를 설정할 수 있도록하는 쿼리 parameter의 이름을 나타내는 문자열 값입니다. 기본값은 `None`으로, 클라이언트가 요청 된 페이지 크기를 제어 할 수 없음을 나타냅니다.
 - `max_page_size` : 설정되면 request 된 최대 페이지 크기를 나타내는 숫자 값입니다. 이 속성은 `page_size_query_param`도 설정되어있는 경우에만 유효합니다.
 - `last_page_strings` : `page_query_param`과 함께 사용되어 최종 페이지를 요청할 수있는 값을 나타내는 문자열 값의 list 또는 tuple 입니다. 기본값은 `('last',)` 입니다.
-- `template` : 검색 가능한 API에서 pagination 컨트롤을 렌더링 할 때 사용할 템플릿의 이름입니다. 렌더링 스타일을 수정하기 위해 오버라이드 되거나 HTML pagination 컨트롤을 완전히 비활성화하려면 `None`으로 설정 할 수 있습니다. 기본값은 `"rest_framework / pagination / numbers.html"`입니다.
+- `template` : browsable API에서 pagination 컨트롤을 렌더링 할 때 사용할 템플릿의 이름입니다. 렌더링 스타일을 수정하기 위해 오버라이드 되거나 HTML pagination 컨트롤을 완전히 비활성화하려면 `None`으로 설정 할 수 있습니다. 기본값은 `"rest_framework / pagination / numbers.html"`입니다.
 
 ---
 
 ### LimitOffsetPagination
-이 pagination 스타일은 여러 데이터베이스 레코드를 찾을 때 사용되는 구문을 반영합니다. 클라이언트에는 "limit"와 "offset" 쿼리 매개 변수가 모두 포함됩니다. **limit** 는 반환 할 최대 항목 수를 나타내며 다른 스타일의 `page_size`와 같습니다. **offset**은 unpaginated 된 항목의 완성된 set과 관련하여 쿼리의 시작 위치를 나타냅니다.
+이 pagination 스타일은 여러 데이터베이스 레코드를 찾을 때 사용되는 구문을 반영합니다. 클라이언트에는 "limit"와 "offset" 쿼리 parameter가 모두 포함됩니다. **limit** 는 반환 할 최대 항목 수를 나타내며 다른 스타일의 `page_size`와 같습니다. **offset**은 unpaginated 된 항목의 완성된 set과 관련하여 쿼리의 시작 위치를 나타냅니다.
 
 **Request**:
 
@@ -151,31 +151,31 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
 }
 ```
-선택적으로 `PAGE_SIZE` 키를 설정 할 수도 있습니다. `PAGE_SIZE` 매개 변수도 사용되는 경우 `limit` 쿼리 매개 변수는 선택사항이며 클라이언트가 생략할 수 있습니다.  
+선택적으로 `PAGE_SIZE` 키를 설정 할 수도 있습니다. `PAGE_SIZE` parameter도 사용되는 경우 `limit` 쿼리 parameter는 선택사항이며 클라이언트가 생략할 수 있습니다.  
 `GenericAPIView` 서브 클래스에서는 `pagination_class`속성을 설정하여 각 뷰별로 `LimitOffsetPagination`을 선택할 수 있습니다.  
 
 #### Configuration
 `LimitOffsetPagination` 클래스에는pagination 스타일을 수정하기 위해 오버라이드 할 수 있는 많은 속성이 포함되어 있습니다.  
 이러한 속성을 설정하려면 `LimitOffsetPagination`클래스를 오버라이드 한 다음 위와 같이 custom pagination 클래스를 활성화해야 합니다.
 
-- `default_limit` : 쿼리 매개 변수에서 클라이언트가 제공하지 않을 경우 사용할 제한을 나타내는 숫자 값입니다. 기본값은 `PAGE_SIZE` 설정 키와 동일한 값입니다.
-- `limit_query_param` : "limit" 쿼리 매개 변수의 이름을 나타내는 문자열 값입니다. 기본값은 `'limit'`입니다.
-- `offset_query_param` : "offset" 쿼리 매개 변수의 이름을 나타내는 문자열 값입니다. 기본값은 `'offset'`입니다.
+- `default_limit` : 쿼리 parameter에서 클라이언트가 제공하지 않을 경우 사용할 제한을 나타내는 숫자 값입니다. 기본값은 `PAGE_SIZE` 설정 키와 동일한 값입니다.
+- `limit_query_param` : "limit" 쿼리 parameter의 이름을 나타내는 문자열 값입니다. 기본값은 `'limit'`입니다.
+- `offset_query_param` : "offset" 쿼리 parameter의 이름을 나타내는 문자열 값입니다. 기본값은 `'offset'`입니다.
 - `max_limit` : 설정된 경우 클라이언트가 요청할 수있는 최대 허용 한계를 나타내는 숫자 값입니다. 기본값은 `None`입니다.
-- `template` : 검색 가능한 API에서 페이지 매김 컨트롤을 렌더링 할 때 사용할 템플릿의 이름입니다. 렌더링 스타일을 수정하기 위해 오버라이드 되거나 HTML pagination 컨트롤을 완전히 비활성화하려면 `None`으로 설정 될 수 있습니다. 기본값은 `"rest_framework / pagination / numbers.html"`입니다.
+- `template` : browsable API에서 페이지 매김 컨트롤을 렌더링 할 때 사용할 템플릿의 이름입니다. 렌더링 스타일을 수정하기 위해 오버라이드 되거나 HTML pagination 컨트롤을 완전히 비활성화하려면 `None`으로 설정 될 수 있습니다. 기본값은 `"rest_framework / pagination / numbers.html"`입니다.
 
 ---
 
 ### CursorPagination
-커서 기반 pagination은 클라이언트가 result set를 통해 페이지 할 때 사용할 수 있는 불투명한 "cursor" 지시자를 제공합니다. 이 pagination 스타일은 정방향 및 역방향 컨트롤만 제공하며 클라이언트가 임의의 위치로 이동할 수 없도록 합니다.  
-커서를 기반으로 pagination을 수행하려면 result set에 items의 순서가 변경되지 않아야 합니다. 일반적으로 이 순서는 레코드에 대한 생성 timestamp 일 수 있습니다. 이는 pagination 순서를 일관되게 유지하기 때문입니다.  
-커서 기반 pagination은 다른 스키마보다 복잡합니다. 또한 result set이 고정 된 순서를 제공해야하며 클라이언트가 임의로 result set에 색인을 작성할 수 없도록 해야합니다. 그러나 다음과 같은 이점을 제공합니다.
+cursor 기반 pagination은 클라이언트가 result set를 통해 페이지 할 때 사용할 수 있는 불투명한 "cursor" 지시자를 제공합니다. 이 pagination 스타일은 정방향 및 역방향 컨트롤만 제공하며 클라이언트가 임의의 위치로 이동할 수 없도록 합니다.  
+cursor를 기반으로 pagination을 수행하려면 result set에 items의 순서가 변경되지 않아야 합니다. 일반적으로 이 순서는 레코드에 대한 생성 timestamp 일 수 있습니다. 이는 pagination 순서를 일관되게 유지하기 때문입니다.  
+cursor 기반 pagination은 다른 스키마보다 복잡합니다. 또한 result set이 고정 된 순서를 제공해야하며 클라이언트가 임의로 result set에 색인을 작성할 수 없도록 해야합니다. 그러나 다음과 같은 이점을 제공합니다.
 
 - 일관된 pagination 을 제공합니다. 제대로 사용하면 `CursorPagination`은 pagination 과정에서 다른 클라이언트가 새 항목을 삽입하는 경우에도 클라이언트가 레코드를 페이징 할 때 동일한 item을 두번 보지 못하게 합니다.
-- 매우 큰 데이터 set 사용을 지원합니다. 극도로 큰 데이터 set의 경우 offset 기반 pagination 스타일을 사용하는 pagination이 비효율적이거나 사용할 수 없게 될 수 있습니다. 대신 커서 기반 pagination 스키마는 고정 시간 속성을 가지며 데이터 set 크기가 커질수록 속도가 느려지지 않습니다.
+- 매우 큰 데이터 set 사용을 지원합니다. 극도로 큰 데이터 set의 경우 offset 기반 pagination 스타일을 사용하는 pagination이 비효율적이거나 사용할 수 없게 될 수 있습니다. 대신 cursor 기반 pagination 스키마는 고정 시간 속성을 가지며 데이터 set 크기가 커질수록 속도가 느려지지 않습니다.
 
 #### Details and limitations
-커서 기반의 pagination을 올바르게 사용하려면 세부 사항에 약간의 주의가 필요합니다. 우리는 계획을 적용하기를 원하는 순서에 대해 생각할 필요가 있습니다. 기본값은 `"-created"`입니다. 여기에는 모델 인스턴스에 **'created' timestamp 필드가 꼭 있어야하며** 가장 최근에 추가 된 항목이 먼저 나오는 "timeline" 스타일 pagination view가 제공됩니다.  
+cursor 기반의 pagination을 올바르게 사용하려면 세부 사항에 약간의 주의가 필요합니다. 우리는 계획을 적용하기를 원하는 순서에 대해 생각할 필요가 있습니다. 기본값은 `"-created"`입니다. 여기에는 모델 인스턴스에 **'created' timestamp 필드가 꼭 있어야하며** 가장 최근에 추가 된 항목이 먼저 나오는 "timeline" 스타일 pagination view가 제공됩니다.  
 pagination 클래스의 `'ordering'`속성을 무시하거나 `OrderingFilter` 필터 클래스를 `CursorPagination`과 함께 사용하여 순서를 수정할 수 있습니다. `OrderingFilter`와 함께 사용하는 경우 사용자가 주문 할 수 있는 입력란을 제한하는 것이 좋습니다.  
 
 커서 pagination 을 올바르게 사용하려면 다음을 만족시키는 ordering 필드가 있어야 합니다.
@@ -205,9 +205,9 @@ REST_FRAMEWORK = {
 이러한 속성을 설정하려면 `CursorPagination`클래스를 오버라이드 한 다음 위와 같이 custom pagination 클래스를 활성화해야 합니다.
 
 - `page_size` : 페이지 크기를 나타내는 숫자 값입니다. 설정된 경우 `PAGE_SIZE` 설정보다 우선합니다. 기본값은 `PAGE_SIZE` 설정 키와 동일한 값입니다
-- `cursor_query_param` : "cursor" 쿼리 매개 변수의 이름을 나타내는 문자열 값입니다. 기본값은 `'cursor'`입니다.
-- `ordering` : 커서 기반의 pagiation이 적용될 필드를 나타내는 문자열 또는 문자열 list 이어야합니다. (예: `ordering = 'slug'`) 기본값은 `-created`입니다. 뷰에서 `OrderingFilter`를 사용하여 이 값을 오버라이드 할 수도 있습니다.
-- `template` :  브라우징 가능한 API에서  pagination 컨트롤을 렌더링 할 때 사용할 템플릿의 이름입니다. 렌더링 스타일을 수정하기 위해 오버라이드 되거나 HTML pagination 컨트롤을 완전히 비활성화하려면 `None`으로 설정 될 수 있습니다. 기본값은 `"rest_framework/pagination/previous_and_next.html"`입니다.
+- `cursor_query_param` : "cursor" 쿼리 parameter의 이름을 나타내는 문자열 값입니다. 기본값은 `'cursor'`입니다.
+- `ordering` : cursor 기반의 pagiation이 적용될 필드를 나타내는 문자열 또는 문자열 list 이어야합니다. (예: `ordering = 'slug'`) 기본값은 `-created`입니다. 뷰에서 `OrderingFilter`를 사용하여 이 값을 오버라이드 할 수도 있습니다.
+- `template` :  browsable API에서  pagination 컨트롤을 렌더링 할 때 사용할 템플릿의 이름입니다. 렌더링 스타일을 수정하기 위해 오버라이드 되거나 HTML pagination 컨트롤을 완전히 비활성화하려면 `None`으로 설정 될 수 있습니다. 기본값은 `"rest_framework/pagination/previous_and_next.html"`입니다.
 
 ---
 
@@ -242,7 +242,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 100
 }
 ```
-탐색 가능한 API의 response에서 키의 순서가 어떻게 표시되는지 신경 쓰면 pagination 된 response의 본문을 구성할 때 `OrderedDict`를 사용하도록 선택할 수 있지만 선택사항입니다.
+browsable API의 response에서 키의 순서가 어떻게 표시되는지 신경 쓰면 pagination 된 response의 본문을 구성할 때 `OrderedDict`를 사용하도록 선택할 수 있지만 선택사항입니다.
 
 ### Header based pagination
 내장 된 `PageNumberPagination` 스타일을 수정하여 response 본문에 pagination 링크를 포함하는 대신 [GitHub API와 비슷한 스타일](https://developer.github.com/guides/traversing-with-pagination/)로 `link` 헤더를 포함합니다.
@@ -291,7 +291,7 @@ REST_FRAMEWORK = {
 
 ## HTML pagination controls
 
-기본적으로 pagination 클래스를 사용하면 브라우징 가능한 API에 HTML pagination 컨트롤이 표시됩니다. 두 가지 내장 디스플레이 스타일이 있습니다. `PageNumberPagination` 및 `LimitOffsetPagination` 클래스는 이전 및 다음 컨트롤이 포함 된 페이지 번호 목록을 표시합니다. `CursorPagination` 클래스는 이전 및 다음 컨트롤만 표시하는 보다 단순한 스타일을 표시합니다.
+기본적으로 pagination 클래스를 사용하면 browsable API에 HTML pagination 컨트롤이 표시됩니다. 두 가지 내장 디스플레이 스타일이 있습니다. `PageNumberPagination` 및 `LimitOffsetPagination` 클래스는 이전 및 다음 컨트롤이 포함 된 페이지 번호 목록을 표시합니다. `CursorPagination` 클래스는 이전 및 다음 컨트롤만 표시하는 보다 단순한 스타일을 표시합니다.
 
 ### Customizing the controls
 HTML pagination 컨트롤을 렌더링하는 템플릿을 오버라이드 할 수 있습니다. 두 가지 기본 제공 스타일은 다음과 같습니다.
@@ -313,43 +313,4 @@ pagination 클래스가 컨트롤을 표시할지 어떨지를 결정하기 위�
 [`DRF-extensions` 패키지](http://chibisov.github.io/drf-extensions/docs/)에는 [`PaginateByMaxMixin` mixin 클래스](http://chibisov.github.io/drf-extensions/docs/#paginatebymaxmixin)가 포함되어있어 API 클라이언트가 허용되는 최대 페이지 크기를 얻기 위해`?page_size=max`를 지정할 수 있습니다.
 
 ### drf-proxy-pagination
-[`drf-proxy-pagination` 패키지](https://github.com/tuffnatty/drf-proxy-pagination)는 쿼리 매개 변수로 pagination 클래스를 선택할 수 있는 `ProxyPagination` 클래스를 포함합니다.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+[`drf-proxy-pagination` 패키지](https://github.com/tuffnatty/drf-proxy-pagination)는 쿼리 parameter로 pagination 클래스를 선택할 수 있는 `ProxyPagination` 클래스를 포함합니다.

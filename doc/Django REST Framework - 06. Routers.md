@@ -83,7 +83,7 @@ urlpatterns = [
     url(r'^api/', include(router.urls, namespace='api')),
 ]
 ```
-하이퍼링크가 있는 serializer와 함께 네임 스페이스를 사용하는 경우  serializer의 `view_name` 매개 변수가 네임 스페이스를 올바르게 반영하는지 확인해야 합니다. 위의 예제에서 사용자 detail view에 하이퍼링크 된 serializer 필드에 대해 `view_name='api:user-detail'`과 같은 매개변수를 포함해야합니다.
+하이퍼링크가 있는 serializer와 함께 네임 스페이스를 사용하는 경우  serializer의 `view_name` parameter가 네임 스페이스를 올바르게 반영하는지 확인해야 합니다. 위의 예제에서 사용자 detail view에 하이퍼링크 된 serializer 필드에 대해 `view_name='api:user-detail'`과 같은 parameter를 포함해야합니다.
 
 #### Extra link and actions
 `@detail_route`나 `@list_route`로 장식 된 viewset의 모든 메서드도 라우트됩니다. 예를 들어, `UserViewSet`클래스에서 다음과 같은 메서드가 제공됩니다.  
@@ -103,7 +103,7 @@ class UserViewSet(ModelViewSet):
 
 - URL pattern: `^users/{pk}/set_password/$` Name: `'user-set-password'`
 
-custom 작업에 대해 생성 된 기본 URL을 사용하지 않으려면  대신 `url_path` 매개 변수를 사용하여 custom 할 수 있습니다.  
+custom 작업에 대해 생성 된 기본 URL을 사용하지 않으려면  대신 `url_path` parameter를 사용하여 custom 할 수 있습니다.  
 예를 들어 custom 액션의 URL을 `^users/{pk}/change-password/$`으로 변경하려면 다음과 같이 작성하세요.
 
 ```python
@@ -121,7 +121,7 @@ class UserViewSet(ModelViewSet):
 
 - URL pattern: `^users/{pk}/change-password/$` Name: `'user-change-password'`
 
-custom 액션에 대해 생성된 기본 이름을 사용하지 않으려는 경우 `url_name`매개 변수를 사용하여 custom 할 수 있습니다.  
+custom 액션에 대해 생성된 기본 이름을 사용하지 않으려는 경우 `url_name`parameter를 사용하여 custom 할 수 있습니다.  
 예를 들어, custo,액션의 이름을 `'user-change-password'`로 변경하려면 다음과 같이 작성할 수 있습니다.
 
 ```python
@@ -139,7 +139,7 @@ class UserViewSet(ModelViewSet):
 
 - URL pattern: `^users/{pk}/set_password/$` Name: `'user-change-password'`
 
-또한 `url_path`와 `url_name` 매개변수를 함께 사용하여 custom view에 대한 URL생성을 제어할 수 있습니다.  
+또한 `url_path`와 `url_name` parameter를 함께 사용하여 custom view에 대한 URL생성을 제어할 수 있습니다.  
 더 자세한 내용은 [marking extra actions for routing](http://www.django-rest-framework.org/api-guide/viewsets/#marking-extra-actions-for-routing)참조하세요.
 
 ## API Guide

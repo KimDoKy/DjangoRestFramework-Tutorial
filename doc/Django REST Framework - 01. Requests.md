@@ -23,7 +23,7 @@ REST 프레임워크의 Request 객체는 유연한 request 구문 분석 기능
 
 ### .query_params
 `request.query_params`는 `request.GET`에 대해 보다 정확하게 명명 된 동의어입니다.  
-코드 내에서 명확성을 위해 Django의 표준 `request.GET` 대신 `request.query_params`를 사용하는 것이 좋습니다. 이렇게 하면  코드베이스를 보다 정확하고 명확하게 유지할  수 있습니다. 모든 HTTP 메소드 유형에는 `GET`request 뿐만 아니라 쿼리 매개변수가 포함될 수 있습니다.
+코드 내에서 명확성을 위해 Django의 표준 `request.GET` 대신 `request.query_params`를 사용하는 것이 좋습니다. 이렇게 하면  코드베이스를 보다 정확하고 명확하게 유지할  수 있습니다. 모든 HTTP 메소드 유형에는 `GET`request 뿐만 아니라 쿼리 parameter가 포함될 수 있습니다.
 
 ### .parsers
 `APIView` 클래스나 `@api_view` 데코레이터는 뷰에 설정 된 `parser_classes`나 `DEFAULT_PARSER_CLASSES`설정에 따라 속성이 자동으로 `Parser` 인스턴스 목록으로 설정되도록 합니다.  
@@ -92,23 +92,3 @@ request의 콘텐츠 형식에 액서스해야하는 경우 브라우저 기반 
 ## Standard HttpRequest attributes
 REST 프레임워크의 `request`는 Django의 `HttpRequest`를 확장하므로 다른 모든 표준 속성과 메소드도 사용할 수 있습니다. 예를 들어, `request.META`와 `request.session` dict는 정상적으로 사용 가능합니다.  
 구현 이유로 인해 `Request`클래스는 `HttpRequest`클래스에 상속하지 않고 대신 `composition`을 사용하여 클래스를 확장합니다.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

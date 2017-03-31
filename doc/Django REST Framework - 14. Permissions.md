@@ -59,7 +59,7 @@ REST_FRAMEWORK = {
    'rest_framework.permissions.AllowAny',
 )
 ```
-또한 `APIView` 클래스 기반 뷰를 사용하여 view 별 또는 view 별 기준별로 인증 정책을 설정할 수 있습니다.
+또한 `APIView` CBV를 사용하여 view 별 또는 view 별 기준별로 인증 정책을 설정할 수 있습니다.
 
 ```python
 from rest_framework.permissions import IsAuthenticated
@@ -75,7 +75,7 @@ class ExampleView(APIView):
         }
         return Response(content)
 ```
-또는 함수 기반 뷰와 함께 @api_view` 데코레이터를 사용하는 경우.
+또는 FBV와 함께 @api_view` 데코레이터를 사용하는 경우.
 
 ```python
 from rest_framework.decorators import api_view, permission_classes
@@ -237,45 +237,3 @@ generic view는 적절한 개체 수준 사용 권한을 검사하지만 custom 
 
 ### Django Rest Framework API Key
 [Django Rest Framework API Key](https://github.com/manosim/django-rest-framework-api-key) 패키지를 사용하면 서버에 대한 모든 요청에 ​​API 키 헤더가 필요함을 확인할 수 있습니다. 당신은 django 관리 인터페이스에서 생성 할 수 있습니다.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

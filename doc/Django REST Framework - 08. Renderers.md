@@ -29,7 +29,7 @@ REST_FRAMEWORK = {
     )
 }
 ```
-`APIView`클래스 기반의 뷰를 사용하여 개별 view나 viewset에 사용되는 renderer를 설정할 수도 있습니다.
+`APIView` CBV를 사용하여 개별 view나 viewset에 사용되는 renderer를 설정할 수도 있습니다.
 
 ```python
 from django.contrib.auth.models import User
@@ -48,7 +48,7 @@ class UserCountView(APIView):
         content = {'user_count': user_count}
         return Response(content)
 ```
-또는 함수 기반의 뷰와 함께 `@aip_view`데코레이터를 사용하는 경우
+또는 FBV의 뷰와 함께 `@aip_view`데코레이터를 사용하는 경우
 
 ```python
 @api_view(['GET'])
@@ -64,7 +64,7 @@ def user_count_view(request, format=None):
 
 ### Ordering of renderer classes
 API의 Renderer 클래스를 지정하여 각 미디어 타입에 할당 할 우선 순위를 생각할 때 중요합니다. 클라이언트가 `Accept: */*` 헤더를 보내는 것과 `Accept` 헤더를 포함하지 않는 것과 같이 받아 들일 수 있는 표현은 클라이언트가 명시하지 않으면 REST 프레임워크는 list에서 response에 사용할 첫번째 renderer를 선택합니다.  
-예를 들어 API가 JSON response과 HTML 탐색 가능한 API를 제공하는 경우, `Accept` 헤더를 지정하지 않은 클라이언트에 `JSON` 응답을 보내려면 `JSONRenderer`를 기본 renderer로 설정하는 것이 좋습니다.  
+예를 들어 API가 JSON response과 HTML browsable API를 제공하는 경우, `Accept` 헤더를 지정하지 않은 클라이언트에 `JSON` 응답을 보내려면 `JSONRenderer`를 기본 renderer로 설정하는 것이 좋습니다.  
 API에 요청에 따라 일반 웹 페이지와 API 응답을 모두 제공 할 수있는 view가 포함되어있는 경우, [깨진 승인 헤더](http://www.newmediacampaigns.com/blog/browser-rest-http-accept-headers)를 보내는 오래된 브라우저에서 제대로 작동하려면 `TemplateHTMLRenderer`를 기본 렌더러로 설정하는 것이 좋습니다.
 
 ---
@@ -78,7 +78,7 @@ utf-8 인코딩을 사용하여 request 데이터를 `JSON`으로 렌더링합�
 ```python
 {"unicode black star":"★","value":999}
 ```
-클라이언트는 `indent`미디어 타입 매개 변수를 추가로 포함할 수 있습니다. 이 경우 반환 된 JSON은 들여쓰기 됩니다. 예: `Accept: application/json; indent=4`
+클라이언트는 `indent`미디어 타입 parameter를 추가로 포함할 수 있습니다. 이 경우 반환 된 JSON은 들여쓰기 됩니다. 예: `Accept: application/json; indent=4`
 
 ```python
 {
@@ -151,7 +151,7 @@ Browsable API를 위해 데이터를 HTML으로 렌더링합니다.
 **.template**: `'rest_framework/api.html'`  
 
 #### Customizing BrowsableAPIRenderer
-기본적으로 response content는 `BrowsableAPIRenderer`와 별도로 우선 순위가 가장 높은 renderer로 렌더링 됩니다. 이 동작을 custom 해야하는 경우 (ex: HTML을 기본 리턴 형식으로 사용하고 브라우저 API에서 JSON을 사용하는 경우) `get_default_renderer()` 메서드를 대체하서 이를 수행 할 수 있습니다. 예:
+기본적으로 response content는 `BrowsableAPIRenderer`와 별도로 우선 순위가 가장 높은 renderer로 렌더링 됩니다. 이 동작을 custom 해야하는 경우 (ex: HTML을 기본 리턴 형식으로 사용하고 browsable API에서 JSON을 사용하는 경우) `get_default_renderer()` 메서드를 대체하서 이를 수행 할 수 있습니다. 예:
 
 ```python
 class CustomBrowsableAPIRenderer(BrowsableAPIRenderer):
@@ -226,7 +226,7 @@ media_type=None
 ```
 
 선택사항. 제공되는 경우 콘텐츠 협상 단계에서 결정한대로 허용되는 미디어 타입입니다.  
-클라이언트의 `Accept:` 헤더에 따라 renderer의 `media_type`속성보다 더 구체적 일 수 있으며, 미디어 타입 매개 변수가 포함될 수 있습니다. 예를 들어 `"application/json; neated=true"`와 같습니다.
+클라이언트의 `Accept:` 헤더에 따라 renderer의 `media_type`속성보다 더 구체적 일 수 있으며, 미디어 타입 parameter가 포함될 수 있습니다. 예를 들어 `"application/json; neated=true"`와 같습니다.
 
 ```
 renderer_context=None
@@ -235,7 +235,7 @@ renderer_context=None
 기본적으로 이 키에는 `view`, `request`, `response`, `args`, `kwargs` 와 같은 키가 포함됩니다.
 
 ### Example
-다음은 `data` 매개변수가 포함된 response를 응답내용으로 반환하는 일반텍스트 렌더러의 예입니다.
+다음은 `data` parameter가 포함된 response를 응답내용으로 반환하는 일반텍스트 렌더러의 예입니다.
 
 ```python
 from django.utils.encoding import smart_unicode
@@ -264,7 +264,7 @@ class PlainTextRenderer(renderers.BaseRenderer):
 ```
 renderer 클래스가 유니코드 문자열을 반환하면 인코딩을 결정하는데 사용되는 renderer의 `charset` 속성이 설정 된 `Response`클래스에 의해 응답 내용이 bytestring으로 강제 변환됩니다.  
 renderer가 기존 이진 내용을 나타내는 바이트 테스트를 반환하는 경우 response의 `charset`값을 `None`으로 설정해야 합니다.(response의 `Content-Type`헤더에 `charset`값이 설정되지 않도록 보장합니다.)  
-경우에 따라 `renderer_style`속성을 `binary`로 설정할 수도 있습니다. 그렇게 하면 검색 가능한 API가 이진 컨텐츠를 문자열로 표시하지 않게 됩니다.
+경우에 따라 `renderer_style`속성을 `binary`로 설정할 수도 있습니다. 그렇게 하면 browsable API가 이진 컨텐츠를 문자열로 표시하지 않게 됩니다.
 
 ```python
 class JPEGRenderer(renderers.BaseRenderer):

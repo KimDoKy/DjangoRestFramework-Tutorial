@@ -338,7 +338,7 @@ API 스키마에 포함되어야 하는 모든 링크가 포함된 중첩된 dic
 예: `application/json`. request 본문을 기대하지 않는 뷰에 빈 문자열을 반환할 수 있습니다.
 
 #### get_path_fields(self, path, method, view):
-`coreapi.Link()`인스턴스의 list를 반환합니다. URL의 각 경로 매개 변수에 하나씩.
+`coreapi.Link()`인스턴스의 list를 반환합니다. URL의 각 경로 parameter에 하나씩.
 
 #### get_serializer_fields(self, path, method, view)
 `coreapi.Link()` 인스턴스의 list를 반환합니다. 뷰가 사용하는 serializer 클래스의 각 필드에 하나씩.
@@ -385,14 +385,14 @@ content={
 
 `url` : 엔드포인트의 URL. `/users/{username}/`와 같은 URI 템플릿 일 수 있습니다.  
 `action` : 엔드포인트와 연관된 HTTP 방법. 하나 개 이상의 HTTP 메서드를 지원하는 URL은, 각각 하나의 `Link`에 해당해야합니다.  
-`fields` : 입력에 사용 할 수 있는 매개 변수를 설명하는 `Field`인스턴스의 list입니다.  
+`fields` : 입력에 사용 할 수 있는 parameter를 설명하는 `Field`인스턴스의 list입니다.  
 `description` : 엔드포인트의 의미와 용도에 대해 간단한 설명.
 
 #### Field
 지정된 API 엔드포인트에서 단일 입력 매개변수를 나타냅니다.  
 
 `name` : 입력을 설명하는 이름입니다.  
-`required` : 클라이언트가 값을 포함하는 경우 또는 매개 변수를 생략할 수 있는지 여부를 나타내는 boolean 입니다.  
+`required` : 클라이언트가 값을 포함하는 경우 또는 parameter를 생략할 수 있는지 여부를 나타내는 boolean 입니다.  
 `location` : 정보가 request에 어떻게 인코딩되는지 결정합니다. 다음 문자열 중 하나이어야 합니다.  
 >
 **"path"**  
@@ -426,34 +426,3 @@ URL로 인코딩 된 requetst content. `FormParser`를 사용하는 뷰에 해�
 이진 업로드 request content. `FileUploadParser`를 사용하는 뷰에 해당합니다. `location="body"`필드가 링크에 포함된 경우에만 유효합니다.
 
 `description` : 입력 필드의 의미와 용도에 대한 간단한 설명
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -59,7 +59,7 @@ class PurchaseList(generics.ListAPIView):
 ```
 
 ### Filtering against query parameters
-초기 쿼리셋을 필터링하는 마지막 예는 URL의 쿼리 매개 변수를 기반으로 초기 쿼리겍을 결정하는 것입니다.  
+초기 쿼리셋을 필터링하는 마지막 예는 URL의 쿼리 parameter를 기반으로 초기 쿼리겍을 결정하는 것입니다.  
 `http://example.com/api/purchases?username=denvercoder9`과 같은 URL을 처리하려면 `.get.queryset()`을 재정의하고 `username` 매개변수가 URL에 포함되어있는 경우에만 쿼리셋을 필터링하세요.
 
 ```python
@@ -82,7 +82,7 @@ class PurchaseList(generics.ListAPIView):
 
 ### Generic Filtering
 기본 쿼리셋을 재정의 할 수 있을뿐만 아니라 REST 프레임워크는 복잡한 검색 및 필터를 쉽게 구성할 수 있는 일반 필터링 백엔드를 지원합니다.  
-Generic filter는 탐색 가능한 API 및 admin API에서 HTML 컨트롤로 나타낼 수도 있습니다.
+Generic filter는 browsable API 및 admin API에서 HTML 컨트롤로 나타낼 수도 있습니다.
 ![](./images/genericfiltering.png)
 
 ### Setting filter backends
@@ -93,7 +93,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
 ```
-`GenericAPIView` 클래스 기반 뷰를 사용하여 view 당 또는 viewset 단위로 필터 백엔드를 설정할 수도 있습니다.
+`GenericAPIView` CBV를 사용하여 view 당 또는 viewset 단위로 필터 백엔드를 설정할 수도 있습니다.
 
 ```python
 import django_filters.rest_framework
@@ -160,12 +160,12 @@ class UserListView(generics.ListAPIView):
     ...
     filter_backends = (DjangoFilterBackend,)
 ```
-탐색이 가능한 API나 admin API를 사용하는 경우, `django-crispy-forms`를 설치하여 HTML View에서 필터 양식의 표시를 향상시키고 부트스트랩3 HTML을 랜더링할 수 있습니다.
+browsable API나 admin API를 사용하는 경우, `django-crispy-forms`를 설치하여 HTML View에서 필터 양식의 표시를 향상시키고 부트스트랩3 HTML을 랜더링할 수 있습니다.
 
 ```
 pip install django-crispy-forms
 ```
-crispy-forms 를 설치하고 Django의 `INSTALLED_APPS`에 추가하면 탐색 가능한 API는 다음과 같이 `DjangoFilterBackend`에 대한 필터링 컨트롤을 제공합니다.
+crispy-forms 를 설치하고 Django의 `INSTALLED_APPS`에 추가하면 browsable API는 다음과 같이 `DjangoFilterBackend`에 대한 필터링 컨트롤을 제공합니다.
 
 ![](./images/fieldfilter.png)
 
@@ -262,8 +262,8 @@ http://example.com/api/products?manufacturer=foo
 ---
 
 ### SearchFilter
-`SearchFilter`클래스는 간단한 단일 쿼리 매개 변수 기반 검색을 지원하며 [django 관리자의 검색 기능](https://docs.djangoproject.com/en/1.10/ref/contrib/admin/#django.contrib.admin.ModelAdmin.search_fields)을 기반으로 합니다.  
-사용 중에는 탐색 가능한 API에 `SearchFilter` 컨트롤이 포함됩니다.  
+`SearchFilter`클래스는 간단한 단일 쿼리 parameter 기반 검색을 지원하며 [django 관리자의 검색 기능](https://docs.djangoproject.com/en/1.10/ref/contrib/admin/#django.contrib.admin.ModelAdmin.search_fields)을 기반으로 합니다.  
+사용 중에는 browsable API에 `SearchFilter` 컨트롤이 포함됩니다.  
 
 ![](./images/searchfilter.png)
 
@@ -286,7 +286,7 @@ http://example.com/api/users?search=russell
 ```python
 search_fields = ('username', 'email', 'profile__profession')
 ```
-기본적으로 검색은 대소 문자를 구분하지 않는 부분 일치를 사용합니다. 검색 매개 변수에는 공백 또는 `/`또는 쉼표로 구분 된 여러 검색어가 포함 될 수 있습니다. 여러 검색어가 사용되면 제공된 모든 용어가 일치하는 경우에만 list에서 객체가 반환됩니다.  
+기본적으로 검색은 대소 문자를 구분하지 않는 부분 일치를 사용합니다. 검색 parameter에는 공백 또는 `/`또는 쉼표로 구분 된 여러 검색어가 포함 될 수 있습니다. 여러 검색어가 사용되면 제공된 모든 용어가 일치하는 경우에만 list에서 객체가 반환됩니다.  
 검색 동작은 다양한 문자를 `search_fields`앞에 붙이면 제한 될 수 있습니다.
 
 - `'^'`: 검색을 시작합니다.
@@ -300,17 +300,17 @@ search_fields = ('username', 'email', 'profile__profession')
 search_fields = ('=username', '=email')
 ```
 
-기본적으로 검색 매개 변수의 이름은 `'search'`이지만 `SEARCH_PARAM` 설정으로 오버라이드 될 수 있습니다.  
-자세한 내용은 [장고 문서](https://docs.djangoproject.com/en/1.10/ref/contrib/admin/#django.contrib.admin.ModelAdmin.search_fields)를 참조하세요.
+기본적으로 검색 parameter의 이름은 `'search'`이지만 `SEARCH_PARAM` 설정으로 오버라이드 될 수 있습니다.  
+자세한 내용은 [장고 문서](https://docs.djangoproject.com/en/1.10/ref/contrib/admin/parameter#django.contrib.admin.ModelAdmin.search_fields)를 참조하세요.
 
 ---
 
 ### OrderingFilter
-`OrderingFilter`클래스는 쿼리 매개 변수로 제어되는 간단한 결과 순서를 지원합니다.  
+`OrderingFilter`클래스는 쿼리 parameter로 제어되는 간단한 결과 순서를 지원합니다.  
 
 ![](./images/orderingfilter.png)
 
-기본적으로 쿼레 매개 변수의 이름은 `'ordering'`이지만, `ORDERING_PARAM`설정으로 오버라이드 할 수 있습니다.
+기본적으로 쿼레 parameter의 이름은 `'ordering'`이지만, `ORDERING_PARAM`설정으로 오버라이드 할 수 있습니다.
 
 예를 들어 사용자 이름별로 사용자를 정렬 하려면 다음과 같이 입력하세요.
 
@@ -352,7 +352,7 @@ class BookingsListView(generics.ListAPIView):
 
 #### Specifying a default ordering
 `ordering` 속성이 view에 설정되어 있는 경우, 이것은 기본 순서로 사용됩니다.  
-일반적으로 초기 쿼리셋에서 `order_by`를 설정하여 이 작업을 제어할 수 있지만 view의 `ordering` 매개 변수를 사용하면 렌더링 된 템플릿에 컨텍스트로 자동 전달 할 수 있는 방식으로 순서를 지정할 수 있습니다. 이렇게 하면 결과를 정렬하는데 사용하는 경우, column headers를 자동으로 다르게 렌더링 할 수 있습니다.
+일반적으로 초기 쿼리셋에서 `order_by`를 설정하여 이 작업을 제어할 수 있지만 view의 `ordering` parameter를 사용하면 렌더링 된 템플릿에 컨텍스트로 자동 전달 할 수 있는 방식으로 순서를 지정할 수 있습니다. 이렇게 하면 결과를 정렬하는데 사용하는 경우, column headers를 자동으로 다르게 렌더링 할 수 있습니다.
 
 ```python
 class UserListView(generics.ListAPIView):
@@ -427,7 +427,7 @@ class IsOwnerFilterBackend(filters.BaseFilterBackend):
 view에서 `get_queryset()`을 오버라이드하여 동일한 동작을 얻을 수 있지만 filter 백엔드를 사용하면 이 제한을 여러 view에 더 쉽게 추가하거나 전체 API에 적용할 수 있습니다.
 
 ### Customizing the interface
-generic filter는 탐색 가능한 API에도 친터페이스를 제공 할 수 있습니다. 이렇게 하려면 filter의 렌더링 된 HTML 표현을 반환하는 `to_html()`메서드를 구현해야합니다. 이 메서드의 서명은 다음과 같습니다.
+generic filter는 browsable API에도 친터페이스를 제공 할 수 있습니다. 이렇게 하려면 filter의 렌더링 된 HTML 표현을 반환하는 `to_html()`메서드를 구현해야합니다. 이 메서드의 서명은 다음과 같습니다.
 
 `to_html(self, request, queryset, view)`
 
@@ -449,5 +449,5 @@ REST 프레임워크가 제공하는 스키마 자동 생성에서 filter 컨트
 [`django-url-filter`](https://github.com/miki725/django-url-filter)는 친인간적인 URL을 통해 데이터를 필터링하는 안전한 방법을 제공합니다. 이는 DRF serializer 및 필드와 매우 유사하게 작동합니다. 즉, filtersets 및 필터라고 하는 것을 제외하고는 중첩 될 수 있습니다. 이를 통해 관련 데이터를 쉽게 필터링 할 수 있습니다. 또한 이 라이브러리는 일반적인 목적이므로 Django `QuerySet`뿐만 아니라 다른 소스의 데이터를 필터링하는데 사용할 수 있습니다.
 
 ### drf-url-filters
-[`drf-url-filter`](https://github.com/manjitkumar/drf-url-filters)는 Drf `ModelViewSet`의 `Queryset`에 필터를 간단하고 구성 가능한 방식으로 적용하는 간단한 Django 응용 프로그램입니다. 또한 들어오는 쿼리 매개 변수 및 해당 값에 대한 유효성 검사를 지원합니다. 아름다운 python 패키지 `Voluptuous`는 들어오는 쿼리 매개 변수의 유효성 검사에 사용됩니다. 가장 관대한 부분은 쿼리 매개 변수 요구 사항에 따라 자체 유효성 검사를 정의할 수 있다는 것입니다.
+[`drf-url-filter`](https://github.com/manjitkumar/drf-url-filters)는 Drf `ModelViewSet`의 `Queryset`에 필터를 간단하고 구성 가능한 방식으로 적용하는 간단한 Django 응용 프로그램입니다. 또한 들어오는 쿼리 parameter 및 해당 값에 대한 유효성 검사를 지원합니다. 아름다운 python 패키지 `Voluptuous`는 들어오는 쿼리 parameter의 유효성 검사에 사용됩니다. 가장 관대한 부분은 쿼리 parameter 요구 사항에 따라 자체 유효성 검사를 정의할 수 있다는 것입니다.
 
