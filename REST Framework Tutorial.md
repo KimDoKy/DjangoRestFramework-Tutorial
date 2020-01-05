@@ -1255,6 +1255,15 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
 추가 기능의 URL은 기본적으로 메서드 이름과 같습니다. 이를 변경하고 싶다면 데코레이터에 `url_path`인자를 설정하면 됩니다.
 
+> DRF 3.8부터는 더 이상 `@detail_route`가 사용되지 않습니다. 대신 `@action` 데코레이터를 사용할 수 있습니다.
+
+```
+from rest_framework.decorators import action
+
+@action(detail=True, methods=['get'])
+def ....
+```
+
 ### 뷰셋과 주소를 명시적으로 연결하기
 핸들러 메서드는 단지 URL 설정과 연결하는 기능만 담당합니다. 여기서는 먼저 뷰셋의 뷰들을 명시적으로 살펴봅니다.
 
