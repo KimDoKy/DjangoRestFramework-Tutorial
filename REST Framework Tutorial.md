@@ -75,13 +75,13 @@ class Snippet(models.Model):
     class Meta:
         ordering = ('created',)
 ```
-snippet 모델을 초기화할 마이그레이션을 만들어야 하고, 게이터 베이스에 처음으로 싱크도 해야합니다.
+snippet 모델을 초기화할 마이그레이션을 만들어야 하고, 데이터 베이스에 처음으로 싱크도 해야합니다.
 
 ```
 python manage.py makemigrations snippets  
 python manage.py migrate 
 ```
-> 기본 url 설정에서 `snippet`의 url을 include 하기 때문에 snippet에 `urls.py를 생성해 주어야 마이그레이션이 가능합니다.
+> 기본 url 설정에서 `snippet`의 url을 include 하기 때문에 snippet에 `urls.py`를 생성해 주어야 마이그레이션이 가능합니다.
 
 ### 시리얼라이저 클래스 만들기
 
@@ -151,7 +151,8 @@ snippet.save()
 snippet = Snippet(code='print "hello, world"\n')  
 snippet.save() 
 ```
-snippet 인스턴스가 만들어졌으니, 이 이슨턴스들 중 하나를 직렬화해봅니다.
+
+snippet 인스턴스가 만들어졌으니, 이 인스턴스들 중 하나를 직렬화해봅니다.
 
 ```
 serializer = SnippetSerializer(snippet)  
@@ -431,6 +432,7 @@ REST 프레임워크는 API 뷰를 작성할 수 있는 두가지 래퍼를 제�
 또한 때에 따라 `405 Method Not Allowed`를 반환하거나, `request.data`가 깨진 경우 `ParseError` 예외를 던지는 등의 일도 수행합니다.
 
 ### 이 모든 것을 한 군데 모으기
+
 두 요소를 사용하여 뷰를 작성합니다.
 
 ```
@@ -462,7 +464,6 @@ def snippet_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 ```
-> 기존 snippet_detail 수정
 
 뷰가 조금 개선되었습니다.
 조금 간단해지면서 폼 API와 유사하다는 느낌을 줍니다. 또한 이름 형태의 상태 코드를 사용하여 의미를 명확히 했습니다.
@@ -1051,7 +1052,7 @@ def api_root(request, format=None):
 ### 코드 조각의 하이라이트 버전에 대한 엔드 포인트 만들기
 API에서 아직까지 만들지 않은 부분은 바로, 코드 조각의 하이라이트 버전을 볼 수 있는 방법입니다.
 
-API의 다른 부분과는 달리 이번엔 JSON 대신 HTML형태로 나타내겠습니다. REST 프레임워크에서 HTML로 렌더링하는 방식은 두 가지 정도가 있는데, 하나는 쳄플릿을 사용하는 것이고, 다른 하나는 미리 렌더링된 HTML을 사용하는 것입니다.
+API의 다른 부분과는 달리 이번엔 JSON 대신 HTML형태로 나타내겠습니다. REST 프레임워크에서 HTML로 렌더링하는 방식은 두 가지 정도가 있는데, 하나는 템플릿을 사용하는 것이고, 다른 하나는 미리 렌더링된 HTML을 사용하는 것입니다.
 
 하이라이트된 코드 조각을 보여주려고 할 때 주의해야 할 점은, 우리가 사용 할 만한 제네릭 뷰가 없다는 것입니다. 오브젝트 자체가 아니라, 오브젝트의 속성 하나를 반환할 것이기 때문입니다.
 
