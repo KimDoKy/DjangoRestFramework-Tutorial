@@ -1,4 +1,4 @@
-Django==1.10.6
+Django==1.11.28
 djangorestframework==3.6.2
 httpie==0.9.9
 Pygments==2.2.0
