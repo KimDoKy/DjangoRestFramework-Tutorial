@@ -1,5 +1,5 @@
 Django==1.10.6
 djangorestframework==3.6.2
 httpie==0.9.9
-Pygments==2.2.0
+Pygments==2.7.4
 requests==2.13.0
